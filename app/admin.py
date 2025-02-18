@@ -22,6 +22,8 @@ def profile():
     
     return render_template("admin.html")
 
+
+
 @admin_bp.route('/cart')
 
 def cart_page():
@@ -61,7 +63,8 @@ def add_products():
         previous_price = form.previous_price.data
         description = form.description.data
         category = form.category.data
-        quantity = form.quantity.data
+        quantity = form.quantity.data 
+        
 
         size_small = form.size_small.data
         size_medium = form.size_medium.data

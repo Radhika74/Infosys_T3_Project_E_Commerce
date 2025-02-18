@@ -55,8 +55,6 @@ def add_products():
 
     form = ProductForm()
     
-    print(f"/////////////////////////////////////////\nform.quantity.data : {form.quantity.data}")
-
     if form.validate_on_submit():
         product_name = form.product_name.data
         current_price = form.current_price.data
@@ -64,20 +62,8 @@ def add_products():
         description = form.description.data
         category = form.category.data
         quantity = form.quantity.data
-        # if quantity != None:
-        #     quantity = form.quantity.data
-        # else:
-        #    quantity= 1
 
-        # if form.quantity.data:
-        #     quantity = form.quantity.data
-        # else:
-        #     print("///////////////////////////////////////////////////////////////////////////")
-        #     print("quantity not entered")
-        #     flash(f"Enter the Quantity")
-        # print(f"//////////////////////////////////////\n {form.quantity.data}")
         size_small = form.size_small.data
-        # print(f"//////////////////////////////////////\n {form.size_small.data}")
         size_medium = form.size_medium.data
         size_large = form.size_large.data
         sale = form.sale.data

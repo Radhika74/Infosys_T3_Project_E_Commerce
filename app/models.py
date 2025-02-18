@@ -10,11 +10,11 @@ class Product(db.Model):
     color = db.Column(db.String(15))
     rating = db.Column(db.Integer, default = 0)
     category = db.Column(db.String(30))
-    quantity = db.Column(db.Integer, nullable=True,default=0)
+    quantity = db.Column(db.Integer,default=0)
     sale = db.Column(db.Boolean, default=True)
-    size_small = db.Column(db.Integer, nullable=True,default=0)
-    size_medium = db.Column(db.Integer, nullable=True,default=0)
-    size_large = db.Column(db.Integer, nullable=True,default=0)
+    size_small = db.Column(db.Integer,default=0)
+    size_medium = db.Column(db.Integer,default=0)
+    size_large = db.Column(db.Integer,default=0)
     # print(f"{__table__}")
 
 

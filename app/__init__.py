@@ -35,9 +35,9 @@ def create_app():
     app.register_blueprint(views_bp,url_prefix="/")
 
 
-    with app.app_context():
+    # with app.app_context():
         
-        create_database()
+    #     create_database()
 
     
     return app

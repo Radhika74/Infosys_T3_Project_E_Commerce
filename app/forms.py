@@ -10,7 +10,7 @@ class ProductForm(FlaskForm):
     previous_price = FloatField(label='Previous Price', validators=[DataRequired()])
     description = StringField(label="Description of the product",validators = [DataRequired()])
     category = StringField(label="Product Category",validators = [DataRequired()])
-    quantity = IntegerField(label='Quantity', validators=[NumberRange(min=0)] )
+    quantity = IntegerField(label='Quantity', validators=[NumberRange(min=0)])
     size_small = IntegerField(label='Small Quantity', validators=[NumberRange(min=0)] )
     size_medium = IntegerField(label='Medium Quantity', validators=[NumberRange(min=0)] )
     size_large = IntegerField(label='Large Quantity', validators=[NumberRange(min=0)] )

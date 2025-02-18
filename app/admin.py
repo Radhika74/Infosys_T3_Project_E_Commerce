@@ -54,6 +54,9 @@ def get_image(filename):
 def add_products():
 
     form = ProductForm()
+    
+    print(f"/////////////////////////////////////////\nform.quantity.data : {form.quantity.data}")
+
     if form.validate_on_submit():
         product_name = form.product_name.data
         current_price = form.current_price.data
@@ -61,7 +64,20 @@ def add_products():
         description = form.description.data
         category = form.category.data
         quantity = form.quantity.data
+        # if quantity != None:
+        #     quantity = form.quantity.data
+        # else:
+        #    quantity= 1
+
+        # if form.quantity.data:
+        #     quantity = form.quantity.data
+        # else:
+        #     print("///////////////////////////////////////////////////////////////////////////")
+        #     print("quantity not entered")
+        #     flash(f"Enter the Quantity")
+        # print(f"//////////////////////////////////////\n {form.quantity.data}")
         size_small = form.size_small.data
+        # print(f"//////////////////////////////////////\n {form.size_small.data}")
         size_medium = form.size_medium.data
         size_large = form.size_large.data
         sale = form.sale.data
@@ -113,10 +129,18 @@ def clear_table():
 @admin_bp.route("/delete-item/<id>", methods= ['GET','POST'] )
 
 def delete_item(id):
-    if request.method == 'POST':
-        return f" item ID POST DELETE : {id}"
+    
+    try:
+        item_to_delete = Product.query.get(id)
+        db.session.delete(item_to_delete)
+        db.session.commit()
+        flash('One Item deleted')
+        return redirect('/admin/view-products')
+    except Exception as e:
+        print('Item not deleted', e)
+        flash('Item not deleted!!')
+    return redirect('/admin/view-products')
 
-    return f" item ID GET DELETE : {id}"
 
 
 
@@ -136,11 +160,46 @@ def update_item(id):
     form.size_medium.render_kw = {'placeholder': item_to_update.size_medium}
     form.size_large.render_kw = {'placeholder': item_to_update.size_large}
     
-    if form.validate_on_submit:
-
-        
+    if form.validate_on_submit():
 
 
-        return f" item ID POST UPDATE : {id}"
+        product_name = form.product_name.data
+        current_price = form.current_price.data
+        previous_price = form.previous_price.data
+        description = form.description.data
+        category = form.category.data
+        quantity = form.quantity.data
+        size_small = form.size_small.data
+        size_medium = form.size_medium.data
+        size_large = form.size_large.data
+        sale = form.sale.data
 
+        file = form.product_picture.data
+        file_path = f"./media/{file.filename}"
+
+        file.save(file_path)
+
+        try:
+            Product.query.filter_by(id=id).update(dict(
+                product_name = product_name,
+                current_price = current_price,
+                previous_price = previous_price,
+                description = description,
+                category = category,
+                quantity = quantity,
+                size_small = size_small,
+                size_medium = size_medium,
+                size_large = size_large,
+                sale = sale,
+                product_picture = file_path
+            ))
+            db.session.commit()
+            flash(f'{product_name} updated Successfully')
+            print('Product Upadted')
+            return redirect('/admin/view-products')
+            
+        except Exception as e:
+            print('Product not Upated', e)
+            flash('Item Not Updated!!!')
+            
     return render_template("update_item.html", form=form)

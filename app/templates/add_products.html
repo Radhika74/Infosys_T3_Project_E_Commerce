@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+    
+    
+{% block title%}
+    Add Product Page
+{% endblock %}
+
+
+{% block content %}
+
+    
+    <!-- <table>
+        <thead>
+            <tr>
+            
+                <th scope="col">PRODUCT NAME</th>
+                <th scope="col">CURRENT PRICE</th>
+                <th scope="col">PREVIOUS PRICE</th>
+                <th scope="col">DESCRIPTION</th>
+                <th scope="col">CATEGORY</th>
+                <th scope="col">QUANTITY</th>
+
+                <th scope="col">SALE</th>
+                <th scope="col">PRODUCT PICTURE</th>
+            
+            </tr>
+        </thead>
+        
+        <tbody>
+            
+            <tr>
+                <form action="" method="post" enctype="multipart/form-data">
+                
+                    {{ form.csrf_token }}
+                    {{form}}
+                    <td>{{form.product_name(placeholder= " PRODUCT NAME " )}} </td>
+                    <td>{{form.current_price(placeholder= " CURRENT PRICE " )}}</td>
+                    <td>{{form.previous_price(placeholder=" PREVIOUS PRICE ")}}</td>
+                    <td>{{form.description(placeholder=" DESCRIPTION ")}}</td>
+                    <td>{{form.category(placeholder=" CATEGORY ")}}</td>
+                    <td>{{form.quantity(placeholder=" PRESENT STOCK ")}}</td>
+
+                    <td>{{form.size_small(placeholder=" size_small ")}}</td>
+                    <td>{{form.size_medium(placeholder=" size_medium ")}}</td>
+                    <td>{{form.size_large(placeholder=" size_large ")}}</td>
+
+                    <td>{{form.sale}}</td>
+                    <td>{{form.product_picture}}</td>
+                
+                
+                    <td>{{ form.add_product() }}</td>
+                    
+                </form>
+            
+            </tr>
+        
+        </tbody>
+    
+        
+    
+    
+    </table> -->
+    <style>
+        form {
+            font-size: medium;
+            align-content: center;
+            margin-right: 785px;
+            margin-left: 750px ;
+            margin-top: 150px;
+        }
+    </style>
+
+    <form action="" method="post" enctype="multipart/form-data">
+                
+        {{ form.csrf_token }}
+        <br><br>
+
+        {{form.product_name.label()}} 
+        {{form.product_name(placeholder= " PRODUCT NAME " )}} <br> <br>
+
+        {{form.current_price.label()}} 
+        {{form.current_price(placeholder= " CURRENT PRICE " )}} <br> <br>
+
+        {{form.previous_price.label()}} 
+        {{form.previous_price(placeholder=" PREVIOUS PRICE ")}} <br> <br>
+
+        {{form.description.label()}} 
+        {{form.description(placeholder=" DESCRIPTION ")}} <br> <br>
+
+        {{form.category.label()}} 
+        {{form.category(placeholder=" CATEGORY ")}} <br> <br>
+
+        {{form.quantity.label()}} 
+        {{form.quantity(placeholder=" PRESENT STOCK ")}} <br> <br>
+
+        {{form.size_small.label()}} 
+        {{form.size_small(placeholder=" size_small ")}} <br> <br>
+
+        {{form.size_medium.label()}} 
+        {{form.size_medium(placeholder=" size_medium ")}} <br> <br>
+
+        {{form.size_large.label()}} 
+        {{form.size_large(placeholder=" size_large ")}} <br> <br>
+
+        {{form.sale.label()}} 
+        {{form.sale}} <br> <br>
+
+        {{form.product_picture.label()}} 
+        {{form.product_picture}} <br> <br>
+    
+    
+        {{ form.add_product() }} <br>
+        
+    </form>
+
+
+
+
+{% endblock %}
+

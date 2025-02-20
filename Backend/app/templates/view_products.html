@@ -1,0 +1,72 @@
+
+{% extends "base.html" %}
+    
+    
+{% block title%}
+    view products
+{% endblock %}
+
+
+{% block content %}
+    <style>
+        table,thead,tbody,th,tr,td {
+            border: 1px solid black;
+            align-content: center;
+        }
+    </style>
+
+    <div style="align-content: center;">
+
+        <table>
+
+            <thead >
+                <tr>
+                
+                    <th scope="col">PRODUCT ID</th>
+                    <th scope="col">PRODUCT NAME</th>
+                    <th scope="col">CURRENT PRICE</th>
+                    <th scope="col">PREVIOUS PRICE</th>
+                    <th scope="col">DESCRIPTION</th>
+                    <th scope="col">COLOR</th>
+                    <th scope="col">RATING</th>
+                    <th scope="col">CATEGORY</th>
+                    <th scope="col">STOCK AVAILABLE</th>
+                    <th scope="col">SALE</th>
+                    <th scope="col">PRODUCT PICTURE</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+
+                {% for item in items %}
+                    <tr>
+
+                        <th scope="row"> {{ item.id}}</th>
+                        <td>{{item.product_name}}</td>
+                        <td>{{item.current_price}}</td>
+                        <td>{{item.previous_price}}</td>
+                        <td>{{item.description}}</td>
+                        <td>{{item.color}}</td>
+                        <td>{{item.rating}}</td>
+                        <td>{{item.category}}</td>
+                        <td>{{item.in_stock}}</td>
+                        <td>{{item.sale}}</td>
+                        <td><img src="{{item.product_picture}}" alt="{{item.product_name}} not loaded" style="height: 50px; width: 50px;"></td>
+
+                        <td><button href="#"> UPDATE </button></td>
+                        <td><button href="#"> DELETE </button></td>
+                        <!-- <td><input type="button" href="#" >  UPDATE  </td>
+                        <td><input type="button" href="#">  DELETE  </td> -->
+
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>  
+
+    </div>
+
+{% endblock %}
+
+
+
+

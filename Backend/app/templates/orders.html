@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders | Sara Fashion</title>
+    <link rel="stylesheet" href="orders.css">
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <h1>Sara Fashion</h1>
+        <div class="search-container">
+            <input type="text" placeholder="Search">
+            <button class="search-btn">Search</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Shop</a></li>
+                <li><a href="#">Cart</a></li>
+                <li><a href="#">Wishlist</a></li>
+                <li><a href="#">Account</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+
+<!-- Orders Section -->
+<div class="orders-container">
+    <h2>Orders</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer Name</th>
+                <th>Location</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="orders-list">
+            <!-- Orders will be dynamically inserted here -->
+        </tbody>
+    </table>
+</div>
+
+<footer>
+    <p>&copy; 2025 Sara Fashion. All rights reserved.</p>
+</footer>
+
+<script src="orders.js"></script>
+
+</body>
+</html>

@@ -22,6 +22,8 @@ def profile():
     
     return render_template("admin.html")
 
+
+
 @admin_bp.route('/cart')
 
 def cart_page():
@@ -61,7 +63,8 @@ def add_products():
         previous_price = form.previous_price.data
         description = form.description.data
         category = form.category.data
-        quantity = form.quantity.data
+        quantity = form.quantity.data 
+        
 
         size_small = form.size_small.data
         size_medium = form.size_medium.data
@@ -134,7 +137,7 @@ def delete_item(id):
 
 def update_item(id):
     item_to_update = Product.query.get(id)
-    form = ProductForm()
+    form = ProductForm(obj=item_to_update)
 
     form.product_name.render_kw = {'placeholder': item_to_update.product_name}
     form.current_price.render_kw = {'placeholder': item_to_update.current_price}

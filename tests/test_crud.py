@@ -23,7 +23,7 @@ def test_add_product(client,app):
         initial_count = Product.query.count()
 
     csrf_token = get_csrf_token(client, '/admin/add-product')
-    dummy_file = (io.BytesIO(b'test file content'),"test_image.png","image/png")
+    dummy_file = (io.BytesIO(b'test file content'),"test_image.png")
     response = client.post('/admin/add-product', data={
         'csrf_token' : csrf_token,
         'product_name': 'New Test Product',
@@ -32,9 +32,10 @@ def test_add_product(client,app):
         'description': 'A sample product',
         'category': 'Fashion',
         'quantity': 10,
-        'size_small': 5,
-        'size_medium': 3,
-        'size_large': 2,
+        # uncomment while executing this test, i commented because to check whether the test is working if i not provide the followling fields
+        # 'size_small': 5,
+        # 'size_medium': 3,
+        # 'size_large': 2,
         'sale': True,
         'product_picture' : dummy_file
         },content_type = 'multipart/form-data',follow_redirects=True)
@@ -48,54 +49,61 @@ def test_add_product(client,app):
 
 
 
-# def test_update_product(client,app):
-#     with app.app_context():
-#         product = Product.query.first()
-#         before_update = db.session.get(Product,product.id)
-#         print(f"Before Update: {before_update.current_price}")
-#         assert product is not None
-
-#     csrf_token = get_csrf_token(client, f'/admin/update-item/{product.id}' )    
-
-#     dummy_file = (io.BytesIO(b"test file content"),"test_image.png","image/png")
-
-
-#     response = client.post(f'/admin/update-item/{product.id}', data={
-#     'csrf_token': csrf_token,  
-#     'product_name': 'test by vishnu',
-#     'current_price': 800.00,  
-#     'previous_price': product.previous_price,
-#     'description': product.description,
-#     'category': product.category,
-#     'quantity': product.quantity,
-#     'size_small': product.size_small,
-#     'size_medium': product.size_medium,
-#     'size_large': product.size_large,
-#     'sale': product.sale,
-#     'product_picture' : dummy_file
-#     }, content_type='multipart/form-data',follow_redirects=True)
-
-#     assert response.status_code == 200
-#     print(response.data.decode())
-
-#     with app.app_context():
-#         db.session.expire_all()
-#         updated_product = db.session.get(Product,product.id)
-#         print(f"After Update: {updated_product.current_price}")
-#         assert updated_product.product_name == 'test by vishnu'
-#         assert updated_product.current_price == 800.00
-
-
-
-
-def test_delete_product(client,app):
+def test_update_product(client,app):
     with app.app_context():
         product = Product.query.first()
+        before_update = db.session.get(Product,product.id)
+        print(f"Before Update: {before_update.current_price}")
         assert product is not None
 
-    response = client.post(f'/admin/delete-item/{product.id}', follow_redirects=True)
+    csrf_token = get_csrf_token(client, f'/admin/update-item/{product.id}' )    
+
+    dummy_file = (io.BytesIO(b"test file content"),"test_image.png")
+
+
+    response = client.post(f'/admin/update-item/{product.id}', data={
+    'csrf_token': csrf_token,  
+    'product_name': 'test by vishnu',
+    'current_price': 800.00,  
+    'previous_price': product.previous_price,
+    'description': product.description,
+    'category': product.category,
+    'quantity': product.quantity,
+    'size_small': product.size_small,
+    'size_medium': product.size_medium,
+    'size_large': product.size_large,
+    'sale': product.sale,
+    'product_picture' : dummy_file
+    }, content_type='multipart/form-data',follow_redirects=True)
 
     assert response.status_code == 200
+
+
     with app.app_context():
-        deleted_product = Product.query.get(product.id)
-        assert deleted_product is None
+        updated_product = db.session.get(Product,product.id)
+        print(f"After Update: {updated_product.current_price}")
+        assert updated_product.product_name == 'test by vishnu'
+        assert updated_product.current_price == 800.00
+
+
+
+
+# Run delete after once executing this file, because i'm using the first product for both Update and Delete testing
+# before running Delete comment Update.
+# the CRUD testing completed yaay!!
+
+
+
+# def test_delete_product(client,app):
+#     with app.app_context():
+
+#         product = Product.query.first()
+       
+#         product_id = product.id
+    
+#     response = client.get(f"/admin/delete-item/{product_id}")
+#     assert response.status_code == 302  # Redirect expected
+#     with client.application.app_context():
+#         deleted_product = db.session.get(Product, product_id)
+#         assert deleted_product is None
+

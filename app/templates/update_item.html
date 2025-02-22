@@ -1,120 +1,95 @@
-{% extends "base.html" %}
-    
-    
-{% block title%}
-    Update Product Page
-{% endblock %}
 
+{% extends "base.html" %}
+
+{% block title %} Add Product Page {% endblock %}
 
 {% block content %}
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/add_products.css') }}">
 
-    
-    <!-- <table>
-        <thead>
-            <tr>
-            
-                <th scope="col">PRODUCT NAME</th>
-                <th scope="col">CURRENT PRICE</th>
-                <th scope="col">PREVIOUS PRICE</th>
-                <th scope="col">DESCRIPTION</th>
-                <th scope="col">CATEGORY</th>
-                <th scope="col">QUANTITY</th>
-
-                <th scope="col">SALE</th>
-                <th scope="col">PRODUCT PICTURE</th>
-            
-            </tr>
-        </thead>
+<div class="container">
+    <div class="form-container">
+        <h2 class="text-center mb-4">Update Product </h2>
         
-        <tbody>
+        <form action="" method="post" enctype="multipart/form-data">
+            {{ form.csrf_token }}
             
-            <tr>
-                <form action="" method="post" enctype="multipart/form-data">
-                
-                    {{ form.csrf_token }}
-                    {{form}}
-                    <td>{{form.product_name(placeholder= " PRODUCT NAME " )}} </td>
-                    <td>{{form.current_price(placeholder= " CURRENT PRICE " )}}</td>
-                    <td>{{form.previous_price(placeholder=" PREVIOUS PRICE ")}}</td>
-                    <td>{{form.description(placeholder=" DESCRIPTION ")}}</td>
-                    <td>{{form.category(placeholder=" CATEGORY ")}}</td>
-                    <td>{{form.quantity(placeholder=" PRESENT STOCK ")}}</td>
+            <div class="mb-3">
+                {{ form.product_name.label(class="form-label") }}
+                {{ form.product_name(class="form-control", placeholder="Enter product name") }}
+            </div>
 
-                    <td>{{form.size_small(placeholder=" size_small ")}}</td>
-                    <td>{{form.size_medium(placeholder=" size_medium ")}}</td>
-                    <td>{{form.size_large(placeholder=" size_large ")}}</td>
+            <div class="mb-3">
+                {{ form.current_price.label(class="form-label") }}
+                {{ form.current_price(class="form-control", placeholder="Enter current price") }}
+            </div>
 
-                    <td>{{form.sale}}</td>
-                    <td>{{form.product_picture}}</td>
-                
-                
-                    <td>{{ form.add_product() }}</td>
-                    
-                </form>
-            
-            </tr>
-        
-        </tbody>
-    
-        
-    
-    
-    </table> -->
-    <style>
-        form {
-            font-size: medium;
-            align-content: center;
-            margin-right: 785px;
-            margin-left: 750px ;
-            margin-top: 150px;
+            <div class="mb-3">
+                {{ form.previous_price.label(class="form-label") }}
+                {{ form.previous_price(class="form-control", placeholder="Enter previous price") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.description.label(class="form-label") }}
+                {{ form.description(class="form-control", placeholder="Enter product description") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.category.label(class="form-label") }}
+                {{ form.category(class="form-control", placeholder="Enter category") }}
+            </div>
+
+            <div class="mb-3">
+                {{ form.quantity.label(class="form-label") }}
+                {{ form.quantity(class="form-control", placeholder="Enter quantity in stock") }}
+            </div>
+
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.size_small.label(class="form-label") }}
+                        {{ form.size_small(class="form-control", placeholder="Small") }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.size_medium.label(class="form-label") }}
+                        {{ form.size_medium(class="form-control", placeholder="Medium") }}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="mb-3">
+                        {{ form.size_large.label(class="form-label") }}
+                        {{ form.size_large(class="form-control", placeholder="Large") }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3 form-check">
+                {{ form.sale(class="form-check-input", id="saleCheckbox") }}
+                <label class="form-check-label" for="saleCheckbox">Flash Sale</label>
+            </div>
+
+            <div class="mb-3">
+                {{ form.product_picture.label(class="form-label") }}
+                <input type="file" class="file-input" id="fileInput" name="product_picture">
+                <small class="text-muted">Upload product image</small>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Add Product</button>
+        </form>
+    </div>
+</div>
+
+<!-- JavaScript for Live Preview -->
+<script>
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        let file = event.target.files[0];
+        if (file) {
+            alert("File Selected: " + file.name);
         }
-    </style>
-
-    <form action="" method="post" enctype="multipart/form-data">
-                
-        {{ form.csrf_token }}
-        <br><br>
-
-        {{form.product_name.label()}} 
-        {{form.product_name}} <br> <br>
-
-        {{form.current_price.label()}} 
-        {{form.current_price}} <br> <br>
-
-        {{form.previous_price.label()}} 
-        {{form.previous_price}} <br> <br>
-
-        {{form.description.label()}} 
-        {{form.description}} <br> <br>
-
-        {{form.category.label()}} 
-        {{form.category}} <br> <br>
-
-        {{form.quantity.label()}} 
-        {{form.quantity}} <br> <br>
-
-        {{form.size_small.label()}} 
-        {{form.size_small}} <br> <br>
-
-        {{form.size_medium.label()}} 
-        {{form.size_medium}} <br> <br>
-
-        {{form.size_large.label()}} 
-        {{form.size_large(placeholder=" size_large ")}} <br> <br>
-
-        {{form.sale.label()}} 
-        {{form.sale}} <br> <br>
-
-        {{form.product_picture.label()}} 
-        {{form.product_picture}} <br> <br>
-    
-    
-        {{ form.update_product() }} <br>
-        
-    </form>
-
-
-
+    });
+</script>
 
 {% endblock %}
-

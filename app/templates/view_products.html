@@ -1,92 +1,210 @@
-
 {% extends "base.html" %}
 item_id={{item.id}}
-    
-{% block title%}
-    view products
-{% endblock %}
 
+{% block title %}
+    View Products
+{% endblock %}
 
 {% block content %}
     <style>
-        table,thead,tbody,th,tr,td {
-            border: 1px solid black;
-            align-content: center;
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #F5F5F5;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1200px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(38, 38, 38, 0.15);
+            overflow-x: auto;  /* Enable horizontal scroll for smaller screens */
+        }
+
+        h2 {
+            text-align: center;
+            color: #262626;
+            margin-bottom: 20px;
+        }
+
+        /* Table Styling */
+        .table-container {
+            width: 100%;
+            overflow-x: auto; /* Ensures table fits inside the container */
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background: #C4877A;
+            color: rgb(238, 238, 238);
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        tbody tr:hover {
+            background-color: #F5F5F5;
+            transition: 0.3s;
+        }
+
+        /* Image Styling */
+        .product-img {
+            height: 50px;
+            width: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Button Styling */
+        .btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .btn-update {
+            background-color: #5C8A8A;
+            color: white;
+        }
+
+        .btn-update:hover {
+            background-color: #497272;
+        }
+
+        .btn-delete {
+            background-color: #C4877A;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background-color: #a86e62;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 1024px) {
+            th, td {
+                font-size: 12px;
+                padding: 8px;
+            }
+
+            .btn {
+                font-size: 12px;
+                padding: 6px 8px;
+            }
+
+            .product-img {
+                height: 40px;
+                width: 40px;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .container {
+                width: 100%;
+                padding: 10px;
+            }
+
+            th, td {
+                font-size: 10px;
+                padding: 6px;
+            }
+
+            .btn {
+                font-size: 10px;
+                padding: 5px;
+            }
+
+            .product-img {
+                height: 30px;
+                width: 30px;
+            }
         }
     </style>
 
-    <div style="align-content: center;">
-
-        <table>
-
-            <thead >
-                <tr>
-                
-                    <th scope="col">PRODUCT ID</th>
-                    <th scope="col">PRODUCT NAME</th>
-                    <th scope="col">CURRENT PRICE</th>
-                    <th scope="col">PREVIOUS PRICE</th>
-                    <th scope="col">DESCRIPTION</th>
-                    <th scope="col">COLOR</th>
-                    <th scope="col">RATING</th>
-                    <th scope="col">CATEGORY</th>
-                    <th scope="col">STOCK AVAILABLE</th>
-
-                    <th scope="col">SMALL SIZE</th>
-                    <th scope="col">MEDIUM SIZE</th>
-                    <th scope="col">LARGE SIZE</th>
-
-                    <th scope="col">SALE</th>
-                    <th scope="col">PRODUCT PICTURE</th>
-                    <th scope="col" colspan="2">OPTIONS</th>
-                
-                </tr>
-            </thead>
-            <tbody>
-
-                {% for item in items %}
+    <div class="container">
+        <h2>Product List</h2>
+        <div class="table-container">
+            <table>
+                <thead>
                     <tr>
-
-                        <th scope="row"> {{ item.id}}</th>
-                        <td>{{item.product_name}}</td>
-                        <td>{{item.current_price}}</td>
-                        <td>{{item.previous_price}}</td>
-                        <td>{{item.description}}</td>
-                        <td>{{item.color}}</td>
-                        <td>{{item.rating}}</td>
-                        <td>{{item.category}}</td>
-                        <td>{{item.quantity}}</td>
-
-                        <td>{{item.size_small}}</td>
-                        <td>{{item.size_medium}}</td>
-                        <td>{{item.size_large}}</td>
-
-                        <td>{{item.sale}}</td>
-                        <td><img src="{{item.product_picture}}" alt="{{item.product_name}} not loaded" style="height: 50px; width: 50px;"></td>
-
-                        <!-- <td><button href="#"> UPDATE </button></td> -->
-                        
-                        <td>
-                            <a href="{{ url_for('admin.update_item', id=item.id ) }}" style="text-decoration: none;">
-                                <button>UPDATE</button>
-                            </a>
-                        </td>
-
-                        <td>
-                            <a href="{{ url_for('admin.delete_item', id=item.id ) }}" style="text-decoration: none;">
-                                <button>DELETE</button>
-                            </a>
-                        </td>
-
+                        <th>ID</th>
+                        <th>NAME</th>
+                        <th>PRICE</th>
+                        <th>PREV PRICE</th>
+                        <th>DESC</th>
+                        <th>COLOR</th>
+                        <th>RATING</th>
+                        <th>CATEGORY</th>
+                        <th>STOCK</th>
+                        <th>SMALL</th>
+                        <th>MEDIUM</th>
+                        <th>LARGE</th>
+                        <th>SALE</th>
+                        <th>IMAGE</th>
+                        <th colspan="2">ACTIONS</th>
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>  
-
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.product_name }}</td>
+                            <td>{{ item.current_price }}</td>
+                            <td>{{ item.previous_price }}</td>
+                            <td>{{ item.description }}</td>
+                            <td>{{ item.color }}</td>
+                            <td>{{ item.rating }}</td>
+                            <td>{{ item.category }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.size_small }}</td>
+                            <td>{{ item.size_medium }}</td>
+                            <td>{{ item.size_large }}</td>
+                            <td>{{ item.sale }}</td>
+                            <td>
+                                <img src="{{ item.product_picture }}" alt="{{ item.product_name }}" class="product-img">
+                            </td>
+                            <td>
+                                <a href="{{ url_for('admin.update_item', id=item.id ) }}">
+                                    <button class="btn btn-update">UPDATE</button>
+                                </a>
+                            </td>
+                            <td>
+                                <button class="btn btn-delete" onclick="confirmDelete('{{ url_for('admin.delete_item', id=item.id ) }}')">DELETE</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
+    <script>
+        function confirmDelete(url) {
+            if (confirm("Are you sure you want to delete this product?")) {
+                window.location.href = url;
+            }
+        }
+    </script>
 {% endblock %}
-
-
-
-

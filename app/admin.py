@@ -58,6 +58,9 @@ def add_products():
     form = ProductForm()
     
     if form.validate_on_submit():
+
+        print(f" Form Data : {request.form}") #for testing
+        
         product_name = form.product_name.data
         current_price = form.current_price.data
         previous_price = form.previous_price.data
@@ -154,7 +157,9 @@ def update_item(id):
     
     if form.validate_on_submit():
 
-        print(f" form validated of product id : {item_to_update.id}")
+        print(f" Form Data : {request.form}") #for testing
+
+        print(f" form validated of product id : {item_to_update.id}")  # for testing
         product_name = form.product_name.data
         current_price = form.current_price.data
         previous_price = form.previous_price.data

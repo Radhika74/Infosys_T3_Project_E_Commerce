@@ -15,7 +15,7 @@ def create_app():
 
     app = Flask(__name__)
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ecomstore_db.db'
-
+    app.config['TESTING'] = True
 
     # RUN IN CMD OR ANY PYTHON FILE TO GENERATE A HEXADECIMAL NUMBER WHICH WE CAN USE AS A "SECRET_KEY"!!!
     # >>> import os 

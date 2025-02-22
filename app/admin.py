@@ -72,8 +72,11 @@ def add_products():
         sale = form.sale.data
 
         file = form.product_picture.data
+        print(f"//////////////////////////////////////////////////////////////////\nfile : {file}")
         # file_path = fr"C:\Documents sys\E-Commerce\media\{file}"
+        print(f"//////////////////////////////////////////////////////////////////\nfile.filename : {file.filename}")
         file_path = f"./media/{file.filename}"
+        print(f"//////////////////////////////////////////////////////////////////\nfile_path : {file_path}")
 
         file.save(file_path)
         
@@ -151,7 +154,7 @@ def update_item(id):
     
     if form.validate_on_submit():
 
-
+        print(f" form validated of product id : {item_to_update.id}")
         product_name = form.product_name.data
         current_price = form.current_price.data
         previous_price = form.previous_price.data

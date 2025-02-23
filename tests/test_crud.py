@@ -97,13 +97,16 @@ def test_update_product(client,app):
 # def test_delete_product(client,app):
 #     with app.app_context():
 
+#         initial_count = Product.query.count()
 #         product = Product.query.first()
        
-#         product_id = product.id
+#         # product_id = product.id
+#         product_id = 20     # check before running
     
 #     response = client.get(f"/admin/delete-item/{product_id}")
-#     assert response.status_code == 302  # Redirect expected
+#     assert response.status_code == 302  
 #     with client.application.app_context():
 #         deleted_product = db.session.get(Product, product_id)
+#         assert Product.query.count() == initial_count - 1 
 #         assert deleted_product is None
 

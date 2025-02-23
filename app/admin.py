@@ -19,8 +19,9 @@ def handle_csrf_error(e):
 @admin_bp.route('/')
 
 def profile():
-    
-    return render_template("admin.html")
+
+    products = Product.query.order_by(Product.id)
+    return render_template("admin.html", items = products)
 
 
 
@@ -101,12 +102,12 @@ def add_products():
         try:
             db.session.add(new_product)
             db.session.commit()
-            flash(f"{product_name} added successfully")
+            flash(f"{product_name} added successfully","success")
             print("product added without any errors!!")
             return render_template("add_products.html", form=form)
         except Exception as e:
             print(e)
-            flash("Product Not Added!! There might be some issue!!")
+            flash("Product Not Added!! There might be some issue!!", "danger")
 
     return render_template("add_products.html", form=form)
 
@@ -117,7 +118,7 @@ def clear_table():
     table = Product()
     rows = table.query.delete()
     db.session.commit()
-    flash(f" {rows} rows deleted ")
+    flash(f" Removed all Products\n Number of products deleted : {rows} ", "danger")
     return redirect("/admin/")
 
 
@@ -129,11 +130,11 @@ def delete_item(id):
         item_to_delete = Product.query.get(id)
         db.session.delete(item_to_delete)
         db.session.commit()
-        flash('One Item deleted')
+        flash(f'{item_to_delete.product_name} deleted',"success")
         return redirect('/admin/view-products')
     except Exception as e:
         print('Item not deleted', e)
-        flash('Item not deleted!!')
+        flash('Item not deleted!!', "danger")
     return redirect('/admin/view-products')
 
 
@@ -191,12 +192,12 @@ def update_item(id):
                 product_picture = file_path
             ))
             db.session.commit()
-            flash(f'{product_name} updated Successfully')
+            flash(f'{product_name} updated Successfully',"success")
             print('Product Upadted')
             return redirect('/admin/view-products')
             
         except Exception as e:
             print('Product not Upated', e)
-            flash('Item Not Updated!!!')
+            flash('Item Not Updated!!!', "danger")
             
     return render_template("update_item.html", form=form)

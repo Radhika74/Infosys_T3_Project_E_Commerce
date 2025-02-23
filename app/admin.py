@@ -104,7 +104,8 @@ def add_products():
             db.session.commit()
             flash(f"{product_name} added successfully","success")
             print("product added without any errors!!")
-            return render_template("add_products.html", form=form)
+            return redirect("/admin/add-product")
+            # return render_template("add_products.html", form=form)
         except Exception as e:
             print(e)
             flash("Product Not Added!! There might be some issue!!", "danger")

@@ -4,27 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Panel - Fashion Finds</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- <link rel="stylesheet" href="/app/static/styles.css"> -->
-=======
     <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
-</head>
->>>>>>> 57a59c3a00b595ab65d6cc72611ea333d52fd0f4
+    <!-- <link rel="stylesheet" href="/app/static/styles.css"> -->
 <body>
     <header>
         <div class="header-container">
             <h2>LOGO</h2>
-<<<<<<< HEAD
 
             <h2 class="search-container" style="font-style: italic;"> Fashion Finds</h2>
             <!-- <div class="search-container">
                 <input type="text" placeholder="Search">
                 <button class="search-btn">Search</button>
             </div> -->
-=======
-            <h2 class="search-container" style="font-style: italic;">Fashion Finds</h2>
->>>>>>> 57a59c3a00b595ab65d6cc72611ea333d52fd0f4
             <nav>
                 <a href="#">HI Admin!!</a>
             </nav>
@@ -33,6 +25,12 @@
 
     <main class="admin-container">
         <div class="admin-sidebar">
+            <div class="admin-info">
+                <img src="{{ url_for('static', filename='images/admin-avatar.png') }}" alt="Admin Avatar" class="admin-avatar">
+                <h3>Admin</h3>
+                <p>Email: admin@store.com</p>
+                <p>Phone: +91 **********</p>
+            </div>
             <a href="{{ url_for('admin.add_products') }}" style="text-decoration: none;">
                 <button class="admin-btn">Add Products</button>
             </a>
@@ -44,12 +42,6 @@
         </div>
 
         <div class="admin-content">
-            <div class="admin-info">
-                <img src="{{ url_for('static', filename='images/admin-avatar.png') }}" alt="Admin Avatar" class="admin-avatar">
-                <h3>Admin</h3>
-                <p>Email: admin@store.com</p>
-                <p>Phone: +91 **********</p>
-            </div>
 
             <h3>Product Section</h3>
             <div class="products-container">

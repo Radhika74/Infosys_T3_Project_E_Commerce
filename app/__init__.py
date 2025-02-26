@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 csrf = CSRFProtect()
+migrate = Migrate()     #for database migration
 
 def create_database():
     db.create_all()
@@ -24,6 +26,7 @@ def create_app():
     app.config['SECRET_KEY'] = '3ac59e5abebccf45a46282ee'
     db.init_app(app)
     csrf.init_app(app)
+    migrate.init_app(app,db)
     
 
     from .auth import auth_bp

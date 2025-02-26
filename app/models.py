@@ -21,3 +21,18 @@ class Product(db.Model):
         return f" product name : {self.product_name}"
     
 
+class DeliveryPerson(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30), nullable=False)
+    location = db.Column(db.String(20), nullable=False)
+    orders = db.relationship('Order', backref='delivery_person', lazy=True)
+
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    customer_name = db.Column(db.String(30), nullable=False)
+    product_name = db.Column(db.String(30), nullable=False)
+    delivery_status = db.Column(db.String(20), nullable=False, default='In Transit')
+    customer_location = db.Column(db.String(20), nullable=False)
+    delivery_person_id = db.Column(db.Integer, db.ForeignKey('delivery_person.id'), nullable=True)
+
+

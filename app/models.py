@@ -15,8 +15,9 @@ class Product(db.Model):
     size_small = db.Column(db.Integer,default=0)
     size_medium = db.Column(db.Integer,default=0)
     size_large = db.Column(db.Integer,default=0)
-    # print(f"{__table__}")
 
 
     def __repr__(self):
         return f" product name : {self.product_name}"
+    
+

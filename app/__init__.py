@@ -29,15 +29,17 @@ def create_app():
     from .auth import auth_bp
     from .admin import admin_bp
     from .views import views_bp
+    from .delivery import delivery_bp
 
     app.register_blueprint(auth_bp,url_prefix="/auth")
     app.register_blueprint(admin_bp,url_prefix="/admin")
+    app.register_blueprint(delivery_bp,url_prefix="/delivery")
     app.register_blueprint(views_bp,url_prefix="/")
 
 
-    # with app.app_context():
+    with app.app_context():
         
-    #     create_database()
+        create_database()
 
     
     return app

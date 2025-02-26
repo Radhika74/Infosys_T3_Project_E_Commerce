@@ -10,11 +10,7 @@ class Product(db.Model):
     color = db.Column(db.String(15))
     rating = db.Column(db.Integer, default = 0)
     category = db.Column(db.String(30))
-    quantity = db.Column(db.Integer,default=0)
     sale = db.Column(db.Boolean, default=True)
-    size_small = db.Column(db.Integer,default=0)
-    size_medium = db.Column(db.Integer,default=0)
-    size_large = db.Column(db.Integer,default=0)
 
 
     def __repr__(self):
@@ -36,3 +32,9 @@ class Order(db.Model):
     delivery_person_id = db.Column(db.Integer, db.ForeignKey('delivery_person.id'), nullable=True)
 
 
+class ProductSize(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    size = db.Column(db.String(50), nullable=False)
+    quantity = db.Column(db.Integer, nullable=False)
+    

@@ -1,4 +1,3 @@
-
 {% extends "base.html" %}
 
 {% block title %} Add Product Page {% endblock %}
@@ -15,6 +14,25 @@
     function showMultipleSizes() {
         document.getElementById('singleQuantityField').style.display = 'none';
         document.getElementById('multipleSizesFields').style.display = 'block';
+    }
+
+    function addSizeQuantityFields() {
+        let container = document.getElementById("sizeQuantityContainer");
+        let index = container.getElementsByClassName("size-quantity-group").length;
+
+        let div = document.createElement("div");
+        div.className = "size-quantity-group";
+        div.innerHTML = `
+            <div class="mb-2">
+                <label class="form-label" for="sizes-${index}-size">Size</label>
+                <input type="text" name="sizes-${index}-size" class="form-control" placeholder="Enter size" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label" for="sizes-${index}-quantity">Quantity</label>
+                <input type="number" name="sizes-${index}-quantity" class="form-control" placeholder="Enter quantity" required>
+            </div>
+        `;
+        container.appendChild(div);
     }
 </script>
 <div class="container">
@@ -53,36 +71,25 @@
             <button class="btn-sizes" type="button" onclick="showMultipleSizes()">Multiple Sizes</button>
 
             <div class="mb-3" id="singleQuantityField" style="display: none;">
-                {{ form.quantity.label(class="form-label") }}
-                {{ form.quantity(class="form-control", placeholder="Enter quantity in stock") }}
+                {{ form.sizes[0].quantity.label(class="form-label") }}
+                {{ form.sizes[0].quantity(class="form-control", placeholder="Enter quantity") }}
             </div>
 
-            <div id="multipleSizesFields" style="display: none;">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            {{ form.size_small.label(class="form-label") }}
-                            {{ form.size_small(class="form-control", placeholder="Small") }}
+            <div id="multipleSizesFields" style="display: none;">    
+                <div id="sizeQuantityContainer" class="mb-3">
+                    <label class="form-label">Size & Quantity</label>
+                    {% for size_form in form.sizes %}
+                        <div class="size-quantity-group">
+                            {{ size_form.size.label(class="form-label") }}
+                            {{ size_form.size(class="form-control", placeholder="Enter size") }}
+
+                            {{ size_form.quantity.label(class="form-label") }}
+                            {{ size_form.quantity(class="form-control", placeholder="Enter quantity") }}                           
                         </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            {{ form.size_medium.label(class="form-label") }}
-                            {{ form.size_medium(class="form-control", placeholder="Medium") }}
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="mb-3">
-                            {{ form.size_large.label(class="form-label") }}
-                            {{ form.size_large(class="form-control", placeholder="Large") }}
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
-            </div>
-            <div class="mb-3 form-check">
-                {{ form.sale(class="form-check-input", id="saleCheckbox") }}
-                <label class="form-check-label" for="saleCheckbox">Flash Sale</label>
-            </div>
+                <button type="button" class="btn btn-secondary mb-3" onclick="addSizeQuantityFields()">ADD</button>
+            </div>    
 
             <div class="mb-3">
                 {{ form.product_picture.label(class="form-label") }}
@@ -94,15 +101,5 @@
         </form>
     </div>
 </div>
-
-<!-- JavaScript for Live Preview -->
-<script>
-    document.getElementById('fileInput').addEventListener('change', function(event) {
-        let file = event.target.files[0];
-        if (file) {
-            alert("File Selected: " + file.name);
-        }
-    });
-</script>
 
 {% endblock %}

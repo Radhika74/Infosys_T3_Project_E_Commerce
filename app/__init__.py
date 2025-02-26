@@ -34,14 +34,14 @@ def create_app():
     from .views import views_bp
     from .delivery import delivery_bp
 
-    from .playground import playground_bp               # ///////////////   plaground_bp    ///////////////
+    # from .playground import playground_bp               # ///////////////   plaground_bp    ///////////////
 
     app.register_blueprint(auth_bp,url_prefix="/auth")
     app.register_blueprint(admin_bp,url_prefix="/admin")
     app.register_blueprint(delivery_bp,url_prefix="/delivery")
     app.register_blueprint(views_bp,url_prefix="/")
 
-    app.register_blueprint(playground_bp,url_prefix="/playground")          # ///////////////   plaground    ///////////////
+    # app.register_blueprint(playground_bp,url_prefix="/playground")          # ///////////////   plaground    ///////////////
 
 
     # with app.app_context():

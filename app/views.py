@@ -9,4 +9,5 @@ def index():
     products = Product.query.all()
     # print("\n\n")
     # print(products)
-    return render_template("home.html",items=products)
+    # return render_template("home.html",items=products)
+    return "Views page"

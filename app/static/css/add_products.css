@@ -91,3 +91,69 @@ body::-webkit-scrollbar {
 ::placeholder {
     color: #8e8e8e; /* Subtle grey placeholder text */
 }
+
+
+
+
+
+
+
+
+/* Updated styles for dynamic size-quantity fields */
+
+.size-quantity-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    align-items: center;
+}
+
+.size-quantity-group .form-control {
+    flex: 1;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #C4877A;
+    background-color: #F5F5F5;
+    color: #262626;
+}
+
+/* Ensures dynamically added fields maintain spacing */
+#sizeQuantityContainer .size-quantity-group {
+    margin-top: 5px;
+}
+
+/* Style for the ADD button */
+.btn-secondary {
+    background-color: #6c757d;
+    border: none;
+    padding: 8px 12px;
+    font-size: 14px;
+    border-radius: 6px;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

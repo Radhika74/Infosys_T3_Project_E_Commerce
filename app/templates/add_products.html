@@ -18,18 +18,18 @@
 
     function addSizeQuantityFields() {
         let container = document.getElementById("sizeQuantityContainer");
-        let index = container.getElementsByClassName("size-quantity-group").length;
-
+        let index = container.children.length;
         let div = document.createElement("div");
         div.className = "size-quantity-group";
         div.innerHTML = `
-            <div class="mb-2">
-                <label class="form-label" for="sizes-${index}-size">Size</label>
-                <input type="text" name="sizes-${index}-size" class="form-control" placeholder="Enter size" required>
+            <div class="size-quantity-group">
+                {{ form.sizes.append_entry() }}
+                {{ form.sizes[-1].size.label(class="form-label") }}
+                {{ form.sizes[-1].size(class="form-control", placeholder="Enter size") }}
             </div>
-            <div class="mb-2">
-                <label class="form-label" for="sizes-${index}-quantity">Quantity</label>
-                <input type="number" name="sizes-${index}-quantity" class="form-control" placeholder="Enter quantity" required>
+            <div class="size-quantity-group">
+                {{ form.sizes[-1].quantity.label(class="form-label") }}
+                {{ form.sizes[-1].quantity(class="form-control", placeholder="Enter quantity") }}
             </div>
         `;
         container.appendChild(div);
@@ -71,8 +71,12 @@
             <button class="btn-sizes" type="button" onclick="showMultipleSizes()">Multiple Sizes</button>
 
             <div class="mb-3" id="singleQuantityField" style="display: none;">
-                {{ form.sizes[0].quantity.label(class="form-label") }}
-                {{ form.sizes[0].quantity(class="form-control", placeholder="Enter quantity") }}
+
+                {% for size_form in form.sizes %}
+                {{ size_form.quantity.label(class="form-label") }}
+                {{ size_form.quantity(class="form-control", placeholder="Enter quantity") }}
+                {% endfor %}
+
             </div>
 
             <div id="multipleSizesFields" style="display: none;">    

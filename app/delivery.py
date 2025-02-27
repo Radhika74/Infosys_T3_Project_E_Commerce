@@ -125,12 +125,12 @@ def dashboard(id):
     #     if order.delivery_person_id == 1 :
     #         print(order.id, order.delivery_status, order.customer_name)  # Print status of each order
 
-    status = []
+    produsts = []
     for order in In_Transit_orders:
         # if order.delivery_person_id == 1:
-            status.append(order.product_name)
+            produsts.append(order.product_name)
 
-    return f"{In_Transit_orders}-------------------{status}-----------len : {len(In_Transit_orders)}"
+    return f"{In_Transit_orders}-------------------{produsts}-----------len : {len(In_Transit_orders)}"
 
 
 

@@ -29,6 +29,8 @@ class Order(db.Model):
     product_name = db.Column(db.String(30), nullable=False)
     delivery_status = db.Column(db.String(20), nullable=False, default='In Transit')
     customer_location = db.Column(db.String(20), nullable=False)
+    order_date = db.Column(db.DateTime(), nullable=True)
+    delivery_date = db.Column(db.DateTime(), nullable=True)
     delivery_person_id = db.Column(db.Integer, db.ForeignKey('delivery_person.id'), nullable=True)
 
 

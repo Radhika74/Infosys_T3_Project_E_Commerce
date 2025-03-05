@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Delivery Dashboard</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/delivery.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %} Delivery Dashboar {% endblock %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/delivery.css') }}">
+
+
     <h2 class="title">Delivery Dashboard</h2>
 
     <div class="container">
@@ -27,12 +28,10 @@
                         <td>{{ order.customer_name }}</td>
                         <td>{{ order.product_name }}</td>
                         <td>
-                            <a href="{{ url_for('delivery.assign_delivery', order_id=order.id, person_id = person.id ) }}">
+                            <a href="{{ url_for('delivery.assign_delivery', order_id=order.id, person_id=person.id) }}">
                                 <button class="btn btn-update-status" type="button">Assign Me</button>
                             </a>
                         </td>
-                        
-                        <!-- <td><button class="assign-btn">Assign</button></td> -->
                     </tr>
                     {% endfor %}
                 </table>
@@ -58,31 +57,36 @@
                         <td>{{ order.id }}</td>
                         <td>{{ order.customer_name }}</td>
                         <td>{{ order.product_name }}</td>
-                        <td>{{ order.delivery_status }}</td>
                         <td>
-                            <select id="statusSelect">
-                                <option value="In Transit" {% if order.status == "In Transit" %}selected{% endif %}>In Transit</option>
-                                <option value="accepted">accepted</option>
-                                <option value="pending">pending</option>
-                                <option value="Delivered">Delivered</option>
+                            <select class="statusSelect" data-order-id="{{ order.id }}">
+                                <option value="In Transit" {% if order.delivery_status == "In Transit" %}selected{% endif %}>In Transit</option>
+                                <option value="accepted" {% if order.delivery_status == "accepted" %}selected{% endif %}>Accepted</option>
+                                <option value="pending" {% if order.delivery_status == "pending" %}selected{% endif %}>Pending</option>
+                                <option value="Delivered" {% if order.delivery_status == "Delivered" %}selected{% endif %}>Delivered</option>
                             </select>
-                            <a href="{{ url_for('delivery.update_status', order_id=order.id, status='PLACEHOLDER') }}" id="updateStatusLink">
+                        </td>
+                        <td>
+                            <a href="{{ url_for('delivery.update_status', order_id=order.id, status=order.delivery_status) }}" id="updateStatusLink-{{ order.id }}">
                                 <button class="btn btn-update-status">Update Status</button>
                             </a>
-                            
                         </td>
                     </tr>
                     {% endfor %}
-                    <script>
-                        document.getElementById('statusSelect').addEventListener('change', function() {
-                            document.getElementById('updateStatusLink').href = "{{ url_for('delivery.update_status', order_id=order.id, status='PLACEHOLDER') }}".replace('PLACEHOLDER', this.value);
-                            console.log(`this.value  :  ${this.value}`)
-                        });
-                        document.getElementById('updateStatusLink').href = "{{ url_for('delivery.update_status', order_id=order.id, status='PLACEHOLDER') }}".replace('PLACEHOLDER', document.getElementById('statusSelect').value);
-                
-                        console.log(`document.getElementById('statusSelect').value   :  ${document.getElementById('statusSelect').value}`)
-                    </script>
                 </table>
+
+                <!-- JavaScript to Update the URL Dynamically -->
+                <script>
+                    document.querySelectorAll('.statusSelect').forEach((select) => {
+                        select.addEventListener('change', function() {
+                            let orderId = this.dataset.orderId;
+                            let updateLink = document.getElementById(`updateStatusLink-${orderId}`);
+                            updateLink.href = "{{ url_for('delivery.update_status', order_id=0, status='PLACEHOLDER') }}"
+                                .replace('0', orderId)
+                                .replace('PLACEHOLDER', this.value);
+                            console.log(`Updated URL for Order ${orderId}: ${updateLink.href}`);
+                        });
+                    });
+                </script>
             {% else %}
                 <p class="empty">No assigned orders</p>
             {% endif %}
@@ -91,7 +95,7 @@
         <!-- Delivered Orders Section -->
         <div class="section">
             <h3>Delivered Orders</h3>
-            {% if delivered_orders %}
+            {% if delivered %}
                 <table>
                     <tr>
                         <th>Order ID</th>
@@ -99,12 +103,12 @@
                         <th>Product</th>
                         <th>Status</th>
                     </tr>
-                    {% for order in delivered_orders %}
+                    {% for order in delivered %}
                     <tr>
                         <td>{{ order.id }}</td>
                         <td>{{ order.customer_name }}</td>
-                        <td>{{ order.product }}</td>
-                        <td>{{ order.status }}</td>
+                        <td>{{ order.product_name }}</td>
+                        <td>{{ order.delivery_status }}</td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -113,12 +117,4 @@
             {% endif %}
         </div>
     </div>
-
-    
-    
-    
-
-
-
-</body>
-</html>
+{% endblock %}

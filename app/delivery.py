@@ -11,11 +11,13 @@ def dashboard(id):
     person = DeliveryPerson.query.get(id)
     available_orders = Order.query.filter_by(customer_location=person.location, delivery_person_id = None).all()
 
-    assigned_orders = Order.query.filter_by(delivery_person_id=person.id).all()
+    # assigned_orders = Order.query.filter_by(delivery_person_id=person.id ).all()
 
-    delivered_orders = Order.query.filter_by(delivery_status = "delivered",delivery_person_id = person.id).all()
+    delivered_orders = Order.query.filter_by(delivery_status = "Delivered",delivery_person_id = person.id).all()
+    assigned_orders = Order.query.filter(Order.delivery_person_id == person.id,Order.delivery_status != "Delivered").all()
 
-    return render_template('delivery.html', person = person ,new_orders=available_orders, assigned_orders=assigned_orders, delivered_orders=delivered_orders)
+
+    return render_template('delivery.html', person = person ,new_orders=available_orders, assigned_orders=assigned_orders, delivered=delivered_orders)
 
 
 
@@ -35,11 +37,13 @@ def dashboard(id):
 
 
 
-@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['GET'])
+@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['GET','POST'])
 def update_status(order_id,status):
 
-    return f"order_id : {order_id} , ----> status : {status}"
-
+    order = Order.query.get(order_id)
+    order.delivery_status = status
+    db.session.commit()
+    return redirect(f'/delivery/person/{order.delivery_person_id}')
 
 
 

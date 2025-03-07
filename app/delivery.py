@@ -5,11 +5,11 @@ from . import db
 delivery_bp = Blueprint('delivery',__name__)
 
 
-@delivery_bp.route('/person/<int:id>')
+@delivery_bp.route('/dashboard/<int:id>')
 def dashboard(id):
 
     person = DeliveryPerson.query.get(id)
-    available_orders = Order.query.filter_by(customer_location=person.location, delivery_person_id = None).all()
+    available_orders = Order.query.filter_by(customer_location=person.location,delivery_person_id = None).all()
 
     # assigned_orders = Order.query.filter_by(delivery_person_id=person.id ).all()
 
@@ -21,63 +21,37 @@ def dashboard(id):
 
 
 
-# Assign Delivery Person
-
-# @delivery_bp.route('/update_status', methods=['POST'])
-# def update_status():
-#     order_id = request.form.get('order_id')
-#     delivery_person_id = request.form.get('delivery_person_id')
-
-#     order = Order.query.get(order_id)
-#     if order and delivery_person_id:
-#         order.delivery_person_id = delivery_person_id
-#         db.session.commit()
-#         return jsonify({'message': 'Assigned successfully!'}), 200
-#     return jsonify({'error': 'Invalid data'}), 400
-
-
-
-@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['GET','POST'])
+@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['POST'])
 def update_status(order_id,status):
 
     order = Order.query.get(order_id)
-    order.delivery_status = status
-    db.session.commit()
-    return redirect(f'/delivery/person/{order.delivery_person_id}')
+    if order :
+
+        order.delivery_status = status
+        db.session.commit()
+        return redirect(f'/delivery/dashboard/{order.delivery_person_id}')
+    else:
+        return "no order exist", 400
 
 
-
-
-
-
-
-
-
-# Update Delivery Status
-@delivery_bp.route('/assign_delivery/<int:order_id>/<int:person_id>', methods=['GET','POST'])
+@delivery_bp.route('/assign_delivery/<int:order_id>/<int:person_id>', methods=['POST'])
 def assign_delivery(order_id,person_id):
 
     try:
         order = Order.query.get(order_id)
-        order.delivery_person_id = person_id
+        person = DeliveryPerson.query.get(person_id)
+        if order and person:
+            order.delivery_person_id = person_id
 
-        db.session.commit()
+            db.session.commit()
+            flash(f"you are assigned to {order.customer_name}'s product : {order.product_name} Delivery","success")
 
-        return redirect(f"/delivery/person/{person_id}")
+            return redirect(f"/delivery/dashboard/{person_id}")
+        else:
+            return "order not exist", 400
     except Exception as e:
         print(f"////////////////////////////////////\n{e}")
-
-    # order_id = request.form.get('order_id')
-    # new_status = request.form.get('new_status')
-
-    # order = Order.query.get(order_id)
-    # if order:
-    #     order.delivery_status = new_status
-    #     if new_status == "Delivered":
-    #         order.delivery_date = datetime.utcnow()
-    #     db.session.commit()
-    #     return jsonify({'message': 'Status updated!'}), 200
-    # return jsonify({'error': 'Invalid order ID'}), 400
+        return f"{e}",400
 
 
 
@@ -86,26 +60,22 @@ def assign_delivery(order_id,person_id):
 
 
 
-
-
-
-
-@delivery_bp.route("/add-delivery-persons")
-def add_delivery_persons():
+# @delivery_bp.route("/add-delivery-persons")
+# def add_delivery_persons():
     
-    name_ = ["naresh"]
-    location_ = ["pune"]
+#     name_ = ["naresh"]
+#     location_ = ["pune"]
     
-    for i in range(len(name_)):
-        delivery_preson = DeliveryPerson()
-        delivery_preson.name = name_[i]
-        delivery_preson.location = location_[i]
-        db.session.add(delivery_preson)
+#     for i in range(len(name_)):
+#         delivery_preson = DeliveryPerson()
+#         delivery_preson.name = name_[i]
+#         delivery_preson.location = location_[i]
+#         db.session.add(delivery_preson)
         
-    db.session.commit()
-    persons = DeliveryPerson.query.order_by(DeliveryPerson.id)
+#     db.session.commit()
+#     persons = DeliveryPerson.query.order_by(DeliveryPerson.id)
 
-    return f"{persons} added successfully to the database!!"
+#     return f"{persons} added successfully to the database!!"
 
 
 
@@ -125,32 +95,32 @@ def add_delivery_persons():
 # @delivery_bp.route("/create-orders")
 # def create_orders():
 
-#     manual_order = Order(
-#         customer_name = "vishnu vardhan",
-#         product_name = "watch",
-#         customer_location = "hyd",
-#         delivery_person_id = 1
-#     )
-#     db.session.add(manual_order)
-#     db.session.commit()
-
-#     # customer_name_ = ["raj","ravi","abhi","avinash","bhanu","bhavan"]
-#     # product_name_ = ["phone","watch","laptop","shirt","books","bag"]
-#     # # delivery_status_ = []
-#     # customer_location_ = ["hyd","delhi","pune","hyd","delhi","delhi"]
-#     # # delivery_person_id_ = []
-
-#     # for i in range(len(customer_name_)):
-#     #     orders = Order()
-#     #     orders.customer_name = customer_name_[i]
-#     #     orders.product_name = product_name_[i]
-#     #     # orders.delivery_status= delivery_status_[i]
-#     #     orders.customer_location = customer_location_[i]
-#     #     # orders.delivery_person_id = delivery_person_id_[i]
-
-#     #     db.session.add(orders)
-
+#     # manual_order = Order(
+#     #     customer_name = "vishnu vardhan",
+#     #     product_name = "watch",
+#     #     customer_location = "hyd",
+#     #     delivery_person_id = 1
+#     # )
+#     # db.session.add(manual_order)
 #     # db.session.commit()
+
+#     customer_name_ = ["raj","ravi","abhi","avinash","bhanu","bhavan"]
+#     product_name_ = ["phone","watch","laptop","shirt","books","bag"]
+#     # delivery_status_ = []
+#     customer_location_ = ["hyd","delhi","pune","hyd","delhi","delhi"]
+#     # delivery_person_id_ = []
+
+#     for i in range(len(customer_name_)):
+#         orders = Order()
+#         orders.customer_name = customer_name_[i]
+#         orders.product_name = product_name_[i]
+#         # orders.delivery_status= delivery_status_[i]
+#         orders.customer_location = customer_location_[i]
+#         # orders.delivery_person_id = delivery_person_id_[i]
+
+#         db.session.add(orders)
+
+#     db.session.commit()
 
 #     return f"{Order.query.count()} orders created"
         

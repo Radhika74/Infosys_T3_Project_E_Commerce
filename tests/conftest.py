@@ -14,3 +14,4 @@ def client(app):
     return app.test_client()
 
 
+# python -m pytest tests\test_delivery_dashboard.py

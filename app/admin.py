@@ -163,10 +163,10 @@ def update_item(id):
     form.previous_price.render_kw = {'placeholder': item_to_update.previous_price}
     form.description.render_kw = {'placeholder': item_to_update.description}
     form.category.render_kw = {'placeholder': item_to_update.category}
-    form.quantity.render_kw = {'placeholder': item_to_update.quantity}
-    form.size_small.render_kw = {'placeholder': item_to_update.size_small}
-    form.size_medium.render_kw = {'placeholder': item_to_update.size_medium}
-    form.size_large.render_kw = {'placeholder': item_to_update.size_large}
+    # form.quantity.render_kw = {'placeholder': item_to_update.quantity}
+    # form.size_small.render_kw = {'placeholder': item_to_update.size_small}
+    # form.size_medium.render_kw = {'placeholder': item_to_update.size_medium}
+    # form.size_large.render_kw = {'placeholder': item_to_update.size_large}
     
     if form.validate_on_submit():
 
@@ -178,10 +178,10 @@ def update_item(id):
         previous_price = form.previous_price.data
         description = form.description.data
         category = form.category.data
-        quantity = form.quantity.data
-        size_small = form.size_small.data
-        size_medium = form.size_medium.data
-        size_large = form.size_large.data
+        # quantity = form.quantity.data
+        # size_small = form.size_small.data
+        # size_medium = form.size_medium.data
+        # size_large = form.size_large.data
         sale = form.sale.data
 
         file = form.product_picture.data
@@ -196,10 +196,10 @@ def update_item(id):
                 previous_price = previous_price,
                 description = description,
                 category = category,
-                quantity = quantity,
-                size_small = size_small,
-                size_medium = size_medium,
-                size_large = size_large,
+                # quantity = quantity,
+                # size_small = size_small,
+                # size_medium = size_medium,
+                # size_large = size_large,
                 sale = sale,
                 product_picture = file_path
             ))

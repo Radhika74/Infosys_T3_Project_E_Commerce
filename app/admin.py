@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,flash,get_flashed_messages,send_from_directory,redirect,request
+from flask import Blueprint,render_template,flash,get_flashed_messages,send_from_directory,redirect,request,url_for
 from .forms import ProductForm
 from .models import Product,ProductSize
 from . import db
@@ -52,76 +52,235 @@ def get_image(filename):
 
 
 
-@admin_bp.route('/add-product', methods = ['GET','POST'])
-# @csrf.exempt
-def add_products():
 
+@admin_bp.route('/add-product', methods=['GET', 'POST'])
+def add_products():
     form = ProductForm()
+    
     if request.method == "GET":
-        form.sizes.entries = []  # Remove any default entries
         form.sizes.append_entry()  # Add only one entry
 
-    print(f"Before validation: {len(form.sizes.entries)}")  # Before validation
-
+    print(f"Before validation: {len(form.sizes.entries)}")  # Debugging
+    
     if form.validate_on_submit():
-
-        # print(f" Form Data : {request.form}") #for testing
-        print(f"After validation: {len(form.sizes.entries)}")  # After validation
-
-
-        product_name = form.product_name.data
-        current_price = form.current_price.data
-        previous_price = form.previous_price.data
-        description = form.description.data
-        category = form.category.data
-        sale = form.sale.data
+        print(f"After validation: {len(form.sizes.entries)}")  # Debugging
+    
+        new_product = Product(
+            product_name=form.product_name.data,
+            current_price=form.current_price.data,
+            previous_price=form.previous_price.data,
+            description=form.description.data,
+            category=form.category.data,
+            sale=form.sale.data
+        )
 
         file = form.product_picture.data
-        print(f"//////////////////////////////////////////////////////////////////\nfile : {file}")
-        # file_path = fr"C:\Documents sys\E-Commerce\media\{file}"
-        print(f"//////////////////////////////////////////////////////////////////\nfile.filename : {file.filename}")
         file_path = f"./media/{file.filename}"
-        print(f"//////////////////////////////////////////////////////////////////\nfile_path : {file_path}")
-
         file.save(file_path)
-        
-
-        new_product = Product()
-        new_product.product_name = product_name
-        new_product.current_price = current_price
-        new_product.previous_price = previous_price
-        new_product.description = description
-        new_product.category = category
-        new_product.sale = sale
-
         new_product.product_picture = file_path
 
         try:
             db.session.add(new_product)
             db.session.commit()
+            print(f"inside try block new_product commit")  # Debugging
+    
 
-            print("\n\n")
-            print(len(form.sizes.entries))
+            for size_form in form.sizes.data:
+                if size_form["single_quantity"] == 0:
+                    new_size = ProductSize(
+                        product_id=new_product.id,
+                        size=size_form["size"],
+                        quantity=size_form["quantity"]
+                    )
+                else:
+                    new_size = ProductSize(
+                        product_id=new_product.id,
+                        size=size_form["size"],
+                        quantity=size_form["single_quantity"]
+                    )
 
-            for size_form in form.sizes.data:  # Correctly iterating over form data
-                new_size = ProductSize(
-                    product_id=new_product.id,
-                    size=size_form["size"],
-                    quantity=size_form["quantity"]
-                )
                 db.session.add(new_size)
-            
+
             db.session.commit()
-            
-            flash(f"{product_name} added successfully","success")
-            print("product added without any errors!!")
+            print(f"inside try block ProductSize commit")  # Debugging
+            flash(f"{new_product.product_name} added successfully", "success")
             return redirect("/admin/add-product")
-            # return render_template("add_products.html", form=form)
         except Exception as e:
-            print(e)
             flash("Product Not Added!! There might be some issue!!", "danger")
+            print(e)
 
     return render_template("add_products.html", form=form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @admin_bp.route('/add-product', methods=['GET', 'POST'])
+# # @csrf.exempt  # Uncomment if needed
+# def add_products():
+#     form = ProductForm()
+
+#     if request.method == "GET":
+#         form.sizes.entries = []  # Reset any default entries
+#         form.sizes.append_entry()  # Ensure at least one entry is present
+
+#     if form.validate_on_submit():
+#         print(f" Form Data : {request.form}")  # Debugging
+
+#         # Extracting form data
+#         product_name = form.product_name.data
+#         current_price = form.current_price.data
+#         previous_price = form.previous_price.data
+#         description = form.description.data
+#         category = form.category.data
+#         sale = form.sale.data
+
+#         # Handling file upload
+#         file = form.product_picture.data
+#         file_path = f"./media/{file.filename}"
+#         file.save(file_path)
+
+#         # Creating Product instance
+#         new_product = Product(
+#             product_name=product_name,
+#             current_price=current_price,
+#             previous_price=previous_price,
+#             description=description,
+#             category=category,
+#             sale=sale,
+#             product_picture=file_path
+#         )
+
+#         try:
+#             db.session.add(new_product)
+#             db.session.commit()
+
+#             # Adding Product Sizes
+#             for size_form in form.sizes.entries:  # Ensure sizes are processed
+#                 new_size = ProductSize(
+#                     product_id=new_product.id,
+#                     size=size_form.form.size.data,
+#                     quantity=size_form.form.quantity.data
+#                 )
+#                 db.session.add(new_size)
+
+#             db.session.commit()
+
+#             flash(f"{product_name} added successfully", "success")
+#             print("Product added without any errors!!")
+#             return redirect(url_for("admin_bp.add_products"))  # Use url_for instead of hardcoding paths
+
+#         except Exception as e:
+#             print(e)
+#             db.session.rollback()
+#             flash("Product Not Added! There might be some issue!", "danger")
+
+#     return render_template("add_products.html", form=form)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @admin_bp.route('/add-product', methods = ['GET','POST'])
+# # @csrf.exempt
+# def add_products():
+
+#     form = ProductForm()
+#     if request.method == "GET":
+#         form.sizes.entries = []  # Remove any default entries
+#         form.sizes.append_entry()  # Add only one entry
+
+#     print(f"Before validation: {len(form.sizes.entries)}")  # Before validation
+
+#     if form.validate_on_submit():
+
+#         # print(f" Form Data : {request.form}") #for testing
+#         print(f"After validation: {len(form.sizes.entries)}")  # After validation
+
+
+#         product_name = form.product_name.data
+#         current_price = form.current_price.data
+#         previous_price = form.previous_price.data
+#         description = form.description.data
+#         category = form.category.data
+#         sale = form.sale.data
+
+#         file = form.product_picture.data
+#         print(f"//////////////////////////////////////////////////////////////////\nfile : {file}")
+#         # file_path = fr"C:\Documents sys\E-Commerce\media\{file}"
+#         print(f"//////////////////////////////////////////////////////////////////\nfile.filename : {file.filename}")
+#         file_path = f"./media/{file.filename}"
+#         print(f"//////////////////////////////////////////////////////////////////\nfile_path : {file_path}")
+
+#         file.save(file_path)
+        
+
+#         new_product = Product()
+#         new_product.product_name = product_name
+#         new_product.current_price = current_price
+#         new_product.previous_price = previous_price
+#         new_product.description = description
+#         new_product.category = category
+#         new_product.sale = sale
+
+#         new_product.product_picture = file_path
+
+#         try:
+#             db.session.add(new_product)
+#             db.session.commit()
+
+#             print("\n\n")
+#             print(len(form.sizes.entries))
+
+#             for size_form in form.sizes.data:  # Correctly iterating over form data
+#                 new_size = ProductSize(
+#                     product_id=new_product.id,
+#                     size=size_form["size"],
+#                     quantity=size_form["quantity"]
+#                 )
+#                 db.session.add(new_size)
+            
+#             db.session.commit()
+            
+#             flash(f"{product_name} added successfully","success")
+#             print("product added without any errors!!")
+#             return redirect("/admin/add-product")
+#             # return render_template("add_products.html", form=form)
+#         except Exception as e:
+#             print(e)
+            # flash("Product Not Added!! There might be some issue!!", "danger")
+
+#     return render_template("add_products.html", form=form)
 
 
 
@@ -156,17 +315,27 @@ def delete_item(id):
 
 def update_item(id):
     item_to_update = Product.query.get(id)
+    if not item_to_update:
+        flash("Product not found!", "danger")
+        return redirect('/admin/view-products')
     form = ProductForm(obj=item_to_update)
 
-    form.product_name.render_kw = {'placeholder': item_to_update.product_name}
-    form.current_price.render_kw = {'placeholder': item_to_update.current_price}
-    form.previous_price.render_kw = {'placeholder': item_to_update.previous_price}
-    form.description.render_kw = {'placeholder': item_to_update.description}
-    form.category.render_kw = {'placeholder': item_to_update.category}
-    # form.quantity.render_kw = {'placeholder': item_to_update.quantity}
-    # form.size_small.render_kw = {'placeholder': item_to_update.size_small}
-    # form.size_medium.render_kw = {'placeholder': item_to_update.size_medium}
-    # form.size_large.render_kw = {'placeholder': item_to_update.size_large}
+    if not form.sizes.entries:  # Prevent duplicate population on POST
+        for size in item_to_update.quantity_size:  # Loop through related sizes
+            form.sizes.append_entry({
+                'size': size.size,
+                'quantity': size.quantity
+            })
+
+    # form.product_name.render_kw = {'placeholder': item_to_update.product_name}
+    # form.current_price.render_kw = {'placeholder': item_to_update.current_price}
+    # form.previous_price.render_kw = {'placeholder': item_to_update.previous_price}
+    # form.description.render_kw = {'placeholder': item_to_update.description}
+    # form.category.render_kw = {'placeholder': item_to_update.category}
+    # # form.quantity.render_kw = {'placeholder': item_to_update.quantity}
+    # # form.size_small.render_kw = {'placeholder': item_to_update.size_small}
+    # # form.size_medium.render_kw = {'placeholder': item_to_update.size_medium}
+    # # form.size_large.render_kw = {'placeholder': item_to_update.size_large}
     
     if form.validate_on_submit():
 
@@ -178,10 +347,6 @@ def update_item(id):
         previous_price = form.previous_price.data
         description = form.description.data
         category = form.category.data
-        # quantity = form.quantity.data
-        # size_small = form.size_small.data
-        # size_medium = form.size_medium.data
-        # size_large = form.size_large.data
         sale = form.sale.data
 
         file = form.product_picture.data
@@ -190,20 +355,31 @@ def update_item(id):
         file.save(file_path)
 
         try:
+            for index, size_form in enumerate(form.sizes.entries):
+                if index < len(item_to_update.quantity_size):
+                    item_to_update.quantity_size[index].size = size_form.size.data
+                    item_to_update.quantity_size[index].quantity = size_form.quantity.data
+                else:
+                    new_size = ProductSize(
+                        product_id=item_to_update.id,
+                        size=size_form.size.data,
+                        quantity=size_form.quantity.data
+                    )
+                    db.session.add(new_size)
+                    db.session.commit()
             Product.query.filter_by(id=id).update(dict(
-                product_name = product_name,
-                current_price = current_price,
-                previous_price = previous_price,
-                description = description,
-                category = category,
-                # quantity = quantity,
-                # size_small = size_small,
-                # size_medium = size_medium,
-                # size_large = size_large,
-                sale = sale,
+                product_name = form.product_name.data,
+                current_price = form.current_price.data,
+                previous_price = form.previous_price.data,
+                description = form.description.data,
+                category = form.category.data,
+                sale = form.sale.data,
                 product_picture = file_path
             ))
             db.session.commit()
+
+
+
             flash(f'{product_name} updated Successfully',"success")
             print('Product Upadted')
             return redirect('/admin/view-products')

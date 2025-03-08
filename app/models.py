@@ -1,4 +1,6 @@
 from . import db
+from datetime import datetime
+
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -10,7 +12,9 @@ class Product(db.Model):
     color = db.Column(db.String(15))
     rating = db.Column(db.Integer, default = 0)
     category = db.Column(db.String(30))
-    sale = db.Column(db.Boolean, default=True)
+    sale = db.Column(db.Boolean, default=False)
+    discount = db.Column(db.Integer,nullable=True)
+    quantity_size = db.relationship('ProductSize',backref = 'product',lazy = True)
 
 
     def __repr__(self):
@@ -29,14 +33,15 @@ class Order(db.Model):
     product_name = db.Column(db.String(30), nullable=False)
     delivery_status = db.Column(db.String(20), nullable=False, default='In Transit')
     customer_location = db.Column(db.String(20), nullable=False)
-    order_date = db.Column(db.DateTime(), nullable=True)
+    order_date = db.Column(db.DateTime(), nullable=True, default=lambda: datetime.now())
     delivery_date = db.Column(db.DateTime(), nullable=True)
+    customer_email = db.Column(db.String(50),nullable=False)
     delivery_person_id = db.Column(db.Integer, db.ForeignKey('delivery_person.id'), nullable=True)
 
 
 class ProductSize(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
-    size = db.Column(db.String(50), nullable=False)
-    quantity = db.Column(db.Integer, nullable=False)
+    size = db.Column(db.String(50), nullable=False, default="No size")
+    quantity = db.Column(db.Integer, nullable=False, default = 0)
     

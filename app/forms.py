@@ -6,8 +6,9 @@ from flask_wtf.file import FileField
 
 
 class SizeQuantityForm(FlaskForm):
-    size = StringField(label="Size", validators=[DataRequired()])
-    quantity = IntegerField(label="Quantity", validators=[DataRequired(), NumberRange(min=0)])
+    size = StringField(label="Size", validators=[optional()], default="No size")
+    quantity = IntegerField(label="Quantity", validators=[optional(), NumberRange(min=0)],default=0)
+    single_quantity = IntegerField(label="Quantity", validators=[optional(), NumberRange(min=0)],default=0)
 
 
 
@@ -22,7 +23,7 @@ class ProductForm(FlaskForm):
     sale = BooleanField(label='Flash Sale', default=False)
 
 
-    sizes = FieldList(FormField(SizeQuantityForm),min_entries=1)
+    sizes = FieldList(FormField(SizeQuantityForm),min_entries=0)
     add_product = SubmitField('Add Product')
     update_product = SubmitField('Update Product')
 

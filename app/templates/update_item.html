@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} Add Product Page {% endblock %}
+{% block title %} Update Product Page {% endblock %}
 
 {% block content %}
 <!-- Bootstrap CSS -->
@@ -16,30 +16,32 @@
         document.getElementById('multipleSizesFields').style.display = 'block';
     }
 
+
     function addSizeQuantityFields() {
         let container = document.getElementById("sizeQuantityContainer");
         let index = container.children.length;
+
         let div = document.createElement("div");
         div.className = "size-quantity-group";
         div.innerHTML = `
             <div class="size-quantity-group">
-                {{ form.sizes.append_entry() }}
-                {{ form.sizes[-1].size.label(class="form-label") }}
-                {{ form.sizes[-1].size(class="form-control", placeholder="Enter size") }}
+                <label for="sizes-${index}-size">Size</label>
+                <input type="text" name="sizes-${index}-size" class="form-control" placeholder="Enter size" required>
             </div>
             <div class="size-quantity-group">
-                {{ form.sizes[-1].quantity.label(class="form-label") }}
-                {{ form.sizes[-1].quantity(class="form-control", placeholder="Enter quantity") }}
+                <label for="sizes-${index}-quantity">Quantity</label>
+                <input type="number" name="sizes-${index}-quantity" class="form-control" placeholder="Enter quantity" required>
             </div>
         `;
         container.appendChild(div);
     }
 </script>
+
 <div class="container">
     <div class="form-container">
         <h2 class="text-center mb-4">Add New Product</h2>
         
-        <form action="" method="post" enctype="multipart/form-data">
+        <form action="{{ url_for('admin.add_products') }}" method="post" enctype="multipart/form-data">
             {{ form.csrf_token }}
             
             <div class="mb-3">
@@ -73,8 +75,8 @@
             <div class="mb-3" id="singleQuantityField" style="display: none;">
 
                 {% for size_form in form.sizes %}
-                {{ size_form.quantity.label(class="form-label") }}
-                {{ size_form.quantity(class="form-control", placeholder="Enter quantity") }}
+                {{ size_form.single_quantity.label(class="form-label") }}
+                {{ size_form.single_quantity(class="form-control", placeholder="Enter quantity") }}
                 {% endfor %}
 
             </div>
@@ -100,6 +102,10 @@
                 <input type="file" class="file-input" id="fileInput" name="product_picture">
                 <small class="text-muted">Upload product image</small>
             </div>
+            <div class="mb-3 form-check">
+                 {{ form.sale(class="form-check-input", id="saleCheckbox") }}
+                 <label class="form-check-label" for="saleCheckbox">Flash Sale</label>
+             </div>
 
             <button type="submit" class="btn btn-primary w-100">Update Product</button>
         </form>

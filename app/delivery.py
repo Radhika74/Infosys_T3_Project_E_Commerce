@@ -1,6 +1,8 @@
 from flask import Blueprint,render_template,flash,get_flashed_messages,send_from_directory,redirect,request
 from .models import Order,DeliveryPerson
 from . import db
+from datetime import datetime
+
 
 delivery_bp = Blueprint('delivery',__name__)
 
@@ -21,20 +23,22 @@ def dashboard(id):
 
 
 
-@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['POST'])
+@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['GET','POST'])
 def update_status(order_id,status):
 
     order = Order.query.get(order_id)
     if order :
 
         order.delivery_status = status
+        if status == "Delivered":
+            order.delivery_date = datetime.now()
         db.session.commit()
         return redirect(f'/delivery/dashboard/{order.delivery_person_id}')
     else:
         return "no order exist", 400
 
 
-@delivery_bp.route('/assign_delivery/<int:order_id>/<int:person_id>', methods=['POST'])
+@delivery_bp.route('/assign_delivery/<int:order_id>/<int:person_id>', methods=['GET','POST'])
 def assign_delivery(order_id,person_id):
 
     try:
@@ -92,37 +96,39 @@ def assign_delivery(order_id,person_id):
 
 
 
-# @delivery_bp.route("/create-orders")
-# def create_orders():
+@delivery_bp.route("/create-orders")
+def create_orders():
 
-#     # manual_order = Order(
-#     #     customer_name = "vishnu vardhan",
-#     #     product_name = "watch",
-#     #     customer_location = "hyd",
-#     #     delivery_person_id = 1
-#     # )
-#     # db.session.add(manual_order)
-#     # db.session.commit()
+    # manual_order = Order(
+    #     customer_name = "vishnu vardhan",
+    #     product_name = "watch",
+    #     customer_location = "hyd",
+    #     delivery_person_id = 1
+    # )
+    # db.session.add(manual_order)
+    # db.session.commit()
 
-#     customer_name_ = ["raj","ravi","abhi","avinash","bhanu","bhavan"]
-#     product_name_ = ["phone","watch","laptop","shirt","books","bag"]
-#     # delivery_status_ = []
-#     customer_location_ = ["hyd","delhi","pune","hyd","delhi","delhi"]
-#     # delivery_person_id_ = []
+    customer_name_ = ["raj","ravi","abhi","avinash","bhanu","bhavan","vishnu","vardhan","guptha"]
+    product_name_ = ["phone","watch","laptop","shirt","books","bag","phone","book","watch"]
+    # delivery_status_ = []
+    customer_location_ = ["hyd","delhi","pune","hyd","delhi","delhi","pune","delhi","pune"]
+    # delivery_person_id_ = []
+    customer_email_ = ["vishnujavvaji19@gmail.com"]
 
-#     for i in range(len(customer_name_)):
-#         orders = Order()
-#         orders.customer_name = customer_name_[i]
-#         orders.product_name = product_name_[i]
-#         # orders.delivery_status= delivery_status_[i]
-#         orders.customer_location = customer_location_[i]
-#         # orders.delivery_person_id = delivery_person_id_[i]
+    for i in range(len(customer_name_)):
+        orders = Order()
+        orders.customer_name = customer_name_[i]
+        orders.product_name = product_name_[i]
+        # orders.delivery_status= delivery_status_[i]
+        orders.customer_location = customer_location_[i]
+        orders.customer_email = customer_email_[0]
+        # orders.delivery_person_id = delivery_person_id_[i]
 
-#         db.session.add(orders)
+        db.session.add(orders)
 
-#     db.session.commit()
+    db.session.commit()
 
-#     return f"{Order.query.count()} orders created"
+    return f"{Order.query.count()} orders created"
         
 
 

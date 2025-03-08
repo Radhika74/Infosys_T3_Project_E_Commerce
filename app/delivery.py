@@ -1,10 +1,53 @@
-from flask import Blueprint,render_template,flash,get_flashed_messages,send_from_directory,redirect,request
-from .models import Order,DeliveryPerson
+from flask import Blueprint,render_template,flash,url_for,redirect,current_app,request
+from .models import Order,DeliveryPerson,User
 from . import db
 from datetime import datetime
+from flask_mail import Message
+from . import mail
+import smtplib
 
 
 delivery_bp = Blueprint('delivery',__name__)
+
+
+
+def send_email(user,order,token):
+    """Send a Product rating email to the user"""
+
+    print("send_email function called")
+    rating_url = url_for('delivery.product_rating', token=token, _external=True)
+    
+    msg = Message(
+        subject='Rate the Product',
+        recipients=["vishnuguptha2004@gmail.com"]
+    )
+    msg.body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nBest regards,\nYour Delivery Team\n\nTo rate the delivered products click : {rating_url}"
+    try:
+        print(user.email)
+        mail.send(msg)
+        print("Email sent")
+    except smtplib.SMTPException as e:
+        print(f"except smtplib.SMTPException as e: {e}")
+    except Exception as e:
+        print(e)
+        flash("Mail not sent!!","danger")
+
+
+@delivery_bp.route("/product-rating/<token>", methods=["GET", "POST"])
+def product_rating(token):
+    # Verify the token
+    user = User.verify_reset_token(token, current_app.config['SECRET_KEY'])
+    
+    if not user:
+        flash("Invalid or expired rating token. Please try again.", "danger")
+        return "pleace retry", 404
+    
+    if request.method == "POST":
+
+        return render_template("product_rating.html")
+
+    
+    return render_template("product_rating.html",user_token=token)
 
 
 @delivery_bp.route('/dashboard/<int:id>')
@@ -32,6 +75,15 @@ def update_status(order_id,status):
         order.delivery_status = status
         if status == "Delivered":
             order.delivery_date = datetime.now()
+            # user = User.query.filter_by(email=order.customer_email)
+
+            user = User.query.first()
+            print(user)
+            # user = User(name = order.customer_name,phone = 9505358105, email = order.customer_email,password="Vishnu@19",address="hyd",state="Telangana",city="hyd",pincode=500014)
+            # db.session.add(user)
+            # db.session.commit()
+            token = user.generate_reset_token(current_app.config['SECRET_KEY'])
+            send_email(user,order,token)
         db.session.commit()
         return redirect(f'/delivery/dashboard/{order.delivery_person_id}')
     else:
@@ -56,6 +108,26 @@ def assign_delivery(order_id,person_id):
     except Exception as e:
         print(f"////////////////////////////////////\n{e}")
         return f"{e}",400
+
+
+
+
+#           \\\\\\\\\\\\\\\\        radhika         //////////////////
+
+
+# def send_delivery_email(user_email, order_id):
+#     """Send an email notification when the order is delivered."""
+#     subject = "Your Order Has Been Delivered!"
+#     body = f"Hello, \n\nYour order with ID {order_id} has been successfully delivered. Thank you for choosing us!\n\nBest regards,\nYour Delivery Team"
+ 
+#     msg = Message(subject, sender="vishnujavvaji19@gmail.com", recipients=[user_email])
+#     msg.body = body
+#     try:
+
+#         mail.send(msg)
+#         print(f"Email sent to {user_email} for order {order_id}")
+#     except Exception as e:
+#         print(f"Error sending email: {e}")
 
 
 

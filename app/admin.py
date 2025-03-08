@@ -299,6 +299,7 @@ def delete_item(id):
     
     try:
         item_to_delete = Product.query.get(id)
+        ProductSize.query.filter_by(product_id=item_to_delete.id).delete()
         db.session.delete(item_to_delete)
         db.session.commit()
         flash(f'{item_to_delete.product_name} deleted',"success")
@@ -311,81 +312,190 @@ def delete_item(id):
 
 
 
-@admin_bp.route("/update-item/<id>", methods= ['GET','POST'] )
 
-def update_item(id):
-    item_to_update = Product.query.get(id)
-    if not item_to_update:
-        flash("Product not found!", "danger")
-        return redirect('/admin/view-products')
-    form = ProductForm(obj=item_to_update)
 
-    if not form.sizes.entries:  # Prevent duplicate population on POST
-        for size in item_to_update.quantity_size:  # Loop through related sizes
-            form.sizes.append_entry({
-                'size': size.size,
-                'quantity': size.quantity
-            })
 
-    # form.product_name.render_kw = {'placeholder': item_to_update.product_name}
-    # form.current_price.render_kw = {'placeholder': item_to_update.current_price}
-    # form.previous_price.render_kw = {'placeholder': item_to_update.previous_price}
-    # form.description.render_kw = {'placeholder': item_to_update.description}
-    # form.category.render_kw = {'placeholder': item_to_update.category}
-    # # form.quantity.render_kw = {'placeholder': item_to_update.quantity}
-    # # form.size_small.render_kw = {'placeholder': item_to_update.size_small}
-    # # form.size_medium.render_kw = {'placeholder': item_to_update.size_medium}
-    # # form.size_large.render_kw = {'placeholder': item_to_update.size_large}
-    
+
+
+
+
+
+
+@admin_bp.route('/update-item/<product_id>', methods=['GET', 'POST'])
+def update_item(product_id):
+    product = Product.query.get_or_404(product_id)  # Fetch product from DB
+    form = ProductForm(obj=product)  # Pre-fill form with existing data
+
+    if request.method == 'GET':
+        form.sizes.entries.clear()  # Clear previous form data
+
+        product_sizes = ProductSize.query.filter_by(product_id=product.id).all()
+
+        if product_sizes:
+            if len(product_sizes) == 1 and product_sizes[0].size == "No size":
+                form.sizes.append_entry({
+                        'size': product_sizes[0].size,
+                        'quantity': 0,
+                        'single_quantity': product_sizes[0].quantity  # Default for size-based products
+                    })
+                
+            elif len(product_sizes) > 1 :  
+                for size_entry in product_sizes:
+                    form.sizes.append_entry({
+                        'size': size_entry.size,
+                        'quantity': size_entry.quantity,
+                        'single_quantity': 0 # Default for size-based products
+                    })
+        else:
+            form.sizes.append_entry({'size': 'No size', 'quantity': 0, 'single_quantity': 0})
+
     if form.validate_on_submit():
+        # Update product details
+        product.product_name = form.product_name.data
+        product.current_price = form.current_price.data
+        product.previous_price = form.previous_price.data
+        product.description = form.description.data
+        product.category = form.category.data
+        product.sale = form.sale.data
 
-        print(f" Form Data : {request.form}") #for testing
+        # Handle product image update (if provided)
+        if form.product_picture.data:
+            file = form.product_picture.data
+            file_path = f"./media/{file.filename}"
+            file.save(file_path)
+            product.product_picture = file_path  # Update image path
 
-        print(f" form validated of product id : {item_to_update.id}")  # for testing
-        product_name = form.product_name.data
-        current_price = form.current_price.data
-        previous_price = form.previous_price.data
-        description = form.description.data
-        category = form.category.data
-        sale = form.sale.data
+        # Update size-quantity details
+        try:    
+            ProductSize.query.filter_by(product_id=product.id).delete()  # Remove old sizes
 
-        file = form.product_picture.data
-        file_path = f"./media/{file.filename}"
-
-        file.save(file_path)
-
-        try:
-            for index, size_form in enumerate(form.sizes.entries):
-                if index < len(item_to_update.quantity_size):
-                    item_to_update.quantity_size[index].size = size_form.size.data
-                    item_to_update.quantity_size[index].quantity = size_form.quantity.data
+            for size_form in form.sizes.data:
+                if size_form["single_quantity"] == 0:  
+                    new_size = ProductSize(
+                        product_id=product.id,
+                        size=size_form["size"],
+                        quantity=size_form["quantity"]
+                    )
                 else:
                     new_size = ProductSize(
-                        product_id=item_to_update.id,
-                        size=size_form.size.data,
-                        quantity=size_form.quantity.data
+                        product_id=product.id,
+                        size=size_form["size"],
+                        quantity=size_form["single_quantity"]
                     )
-                    db.session.add(new_size)
-                    db.session.commit()
-            Product.query.filter_by(id=id).update(dict(
-                product_name = form.product_name.data,
-                current_price = form.current_price.data,
-                previous_price = form.previous_price.data,
-                description = form.description.data,
-                category = form.category.data,
-                sale = form.sale.data,
-                product_picture = file_path
-            ))
+
+                db.session.add(new_size)
+
             db.session.commit()
-
-
-
-            flash(f'{product_name} updated Successfully',"success")
-            print('Product Upadted')
-            return redirect('/admin/view-products')
-            
+            flash(f"{product.product_name} updated successfully!", "success")
+            return redirect("/admin/view-products")
         except Exception as e:
             print('Product not Upated', e)
             flash('Item Not Updated!!!', "danger")
+
+
+    return render_template("update_item.html", form=form, product=product)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @admin_bp.route("/update-item/<id>", methods= ['GET','POST'] )
+
+# def update_item(id):
+#     item_to_update = Product.query.get(id)
+#     if not item_to_update:
+#         flash("Product not found!", "danger")
+#         return redirect('/admin/view-products')
+#     form = ProductForm(obj=item_to_update)
+
+#     if not form.sizes.entries:  # Prevent duplicate population on POST
+#         for size in item_to_update.quantity_size:  # Loop through related sizes
+#             form.sizes.append_entry({
+#                 'size': size.size,
+#                 'quantity': size.quantity
+#             })
+
+#     # form.product_name.render_kw = {'placeholder': item_to_update.product_name}
+#     # form.current_price.render_kw = {'placeholder': item_to_update.current_price}
+#     # form.previous_price.render_kw = {'placeholder': item_to_update.previous_price}
+#     # form.description.render_kw = {'placeholder': item_to_update.description}
+#     # form.category.render_kw = {'placeholder': item_to_update.category}
+#     # # form.quantity.render_kw = {'placeholder': item_to_update.quantity}
+#     # # form.size_small.render_kw = {'placeholder': item_to_update.size_small}
+#     # # form.size_medium.render_kw = {'placeholder': item_to_update.size_medium}
+#     # # form.size_large.render_kw = {'placeholder': item_to_update.size_large}
+    
+#     if form.validate_on_submit():
+
+#         print(f" Form Data : {request.form}") #for testing
+
+#         print(f" form validated of product id : {item_to_update.id}")  # for testing
+#         product_name = form.product_name.data
+#         current_price = form.current_price.data
+#         previous_price = form.previous_price.data
+#         description = form.description.data
+#         category = form.category.data
+#         sale = form.sale.data
+
+#         file = form.product_picture.data
+#         file_path = f"./media/{file.filename}"
+
+#         file.save(file_path)
+
+#         try:
+#             for index, size_form in enumerate(form.sizes.entries):
+#                 if index < len(item_to_update.quantity_size):
+#                     item_to_update.quantity_size[index].size = size_form.size.data
+#                     item_to_update.quantity_size[index].quantity = size_form.quantity.data
+#                 else:
+#                     new_size = ProductSize(
+#                         product_id=item_to_update.id,
+#                         size=size_form.size.data,
+#                         quantity=size_form.quantity.data
+#                     )
+#                     db.session.add(new_size)
+#                     db.session.commit()
+#             Product.query.filter_by(id=id).update(dict(
+#                 product_name = form.product_name.data,
+#                 current_price = form.current_price.data,
+#                 previous_price = form.previous_price.data,
+#                 description = form.description.data,
+#                 category = form.category.data,
+#                 sale = form.sale.data,
+#                 product_picture = file_path
+#             ))
+#             db.session.commit()
+
+
+
+#             flash(f'{product_name} updated Successfully',"success")
+#             print('Product Upadted')
+#             return redirect('/admin/view-products')
             
-    return render_template("update_item.html", form=form)
+#         except Exception as e:
+#             print('Product not Upated', e)
+#             flash('Item Not Updated!!!', "danger")
+            
+#     return render_template("update_item.html", form=form)

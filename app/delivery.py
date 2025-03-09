@@ -2,7 +2,7 @@ from flask import Blueprint,render_template,flash,url_for,redirect,current_app,r
 from .models import Order,DeliveryPerson,User
 from . import db
 from datetime import datetime
-from flask_mail import Message
+from flask_mail import Message # type: ignore
 from . import mail
 import smtplib
 
@@ -15,16 +15,16 @@ def send_email(user,order,token):
     """Send a Product rating email to the user"""
 
     print("send_email function called")
+
     rating_url = url_for('delivery.product_rating', token=token, _external=True)
-    
-    msg = Message(
-        subject='Rate the Product',
-        recipients=["vishnuguptha2004@gmail.com"]
-    )
+    subject='Rate the Product'
+    msg = Message(subject,sender = "vishnujavvaji19@gmail.com",recipients=["vishnujavvaji19@gmail.com"])
     msg.body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nBest regards,\nYour Delivery Team\n\nTo rate the delivered products click : {rating_url}"
     try:
-        print(user.email)
         mail.send(msg)
+        print(rating_url)
+        print(user.email)
+        
         print("Email sent")
     except smtplib.SMTPException as e:
         print(f"except smtplib.SMTPException as e: {e}")
@@ -75,9 +75,9 @@ def update_status(order_id,status):
         order.delivery_status = status
         if status == "Delivered":
             order.delivery_date = datetime.now()
-            # user = User.query.filter_by(email=order.customer_email)
+            user = User.query.filter_by(email=order.customer_email).first()
 
-            user = User.query.first()
+            # user = User.query.first()
             print(user)
             # user = User(name = order.customer_name,phone = 9505358105, email = order.customer_email,password="Vishnu@19",address="hyd",state="Telangana",city="hyd",pincode=500014)
             # db.session.add(user)
@@ -274,3 +274,14 @@ def create_orders():
 #     db.session.close()
 
 #     return f"rollback"
+
+
+@delivery_bp.route("/send-mail")
+def send_mail():
+    if request.method == "GET" :
+        msg = Message("Test Subject", sender='vishnujavvaji19@gmail.com',recipients=['rishithabhatt21@gmail.com'])
+        msg.body = "Test email from Flask"
+        mail.send(msg)
+        print("Email Sent")
+
+        return "check your inbox"

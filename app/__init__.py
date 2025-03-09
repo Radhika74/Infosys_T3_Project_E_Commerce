@@ -2,7 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
 from flask_migrate import Migrate
-from flask_mail import Mail
+from flask_mail import Mail # type: ignore
 
 db = SQLAlchemy()
 csrf = CSRFProtect()
@@ -27,21 +27,21 @@ def create_app():
          # '3ac59e5abebccf45a46282ee'
     app.config['SECRET_KEY'] = '3ac59e5abebccf45a46282ee'
 
-    app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+    app.config['MAIL_SERVER']='smtp.gmail.com'
     app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USERNAME'] = 'vishnujavvaji19@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'grig irqy fdob maug' #   'oowd hosw eeuv jguy'
     app.config['MAIL_USE_TLS'] = True
     app.config['MAIL_USE_SSL'] = False
-    app.config['MAIL_USERNAME'] = 'vishnujavvaji19@gmail.com'  # Update with your email
-    app.config['MAIL_PASSWORD'] = 'xnrm rwyj zydy fhnk'     # Update with your app password
     app.config['MAIL_DEFAULT_SENDER'] = 'vishnujavvaji19@gmail.com'
-    app.config['MAIL_DEBUG'] = True
 
+    mail.init_app(app)
 
 
     db.init_app(app)
     csrf.init_app(app)
     migrate.init_app(app,db)
-    mail.init_app(app)
+    
     
 
     from .auth import auth_bp

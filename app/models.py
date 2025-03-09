@@ -80,4 +80,4 @@ class User(db.Model):
             email = serializer.loads(token, salt='password-reset-salt', max_age=3600)  # 1 hour expiry
             return User.query.filter_by(email=email).first()
         except (SignatureExpired, BadSignature):
-            return None
+            return print("SignatureExpired : ",SignatureExpired , "BadSignature : ",BadSignature)

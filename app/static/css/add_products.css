@@ -1,4 +1,5 @@
 body {
+<<<<<<< HEAD
     font-family: Arial, sans-serif;
     color: #262626; /* Dark text */
     margin-top : 90px;
@@ -9,16 +10,27 @@ body {
 body::-webkit-scrollbar {
     display: none; /* For Chrome, Safari, and Edge */
 }
+=======
+    background-color: #F5F5F5; /* Light background */
+    font-family: Arial, sans-serif;
+    color: #262626; /* Dark text */
+}
+
+>>>>>>> e57cdcf08c0d1c6338be2afa897b460593e0e5dc
 .form-container {
     max-width: 450px;
     background: white;
     padding: 25px;
     border-radius: 10px;
     box-shadow: 0px 4px 10px rgba(38, 38, 38, 0.2);
+<<<<<<< HEAD
 
     margin: auto;
 
     /* margin-left: 30%; */
+=======
+    margin: 50px auto;
+>>>>>>> e57cdcf08c0d1c6338be2afa897b460593e0e5dc
     border: 2px solid #C4877A; /* Warm brown border */
 }
 
@@ -58,6 +70,7 @@ body::-webkit-scrollbar {
     background-color: #a86e62; /* Slightly darker brown */
 }
 
+<<<<<<< HEAD
 .btn-sizes {
     padding: 8px 12px;
     border: none;
@@ -73,6 +86,8 @@ body::-webkit-scrollbar {
     color: white;
 }
 
+=======
+>>>>>>> e57cdcf08c0d1c6338be2afa897b460593e0e5dc
 .form-check-input:checked {
     background-color: #C4877A;
     border-color: #C4877A;
@@ -90,6 +105,7 @@ body::-webkit-scrollbar {
 
 ::placeholder {
     color: #8e8e8e; /* Subtle grey placeholder text */
+<<<<<<< HEAD
 }
 
 
@@ -157,3 +173,6 @@ body::-webkit-scrollbar {
 
 
 
+=======
+}
+>>>>>>> e57cdcf08c0d1c6338be2afa897b460593e0e5dc

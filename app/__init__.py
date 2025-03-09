@@ -59,9 +59,9 @@ def create_app():
     # app.register_blueprint(playground_bp,url_prefix="/playground")          # ///////////////   plaground    ///////////////
 
 
-    # with app.app_context():
+    with app.app_context():
         
-    #     create_database()
+         create_database()
 
     
     return app

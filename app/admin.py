@@ -50,6 +50,9 @@ def get_image(filename):
 
 
 
+@admin_bp.route('/add-product', methods = ['GET','POST'])
+# @csrf.exempt
+def add_products():
 
 
 

@@ -1,9 +1,11 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_wtf import CSRFProtect
+from flask_mail import Mail
 
 db = SQLAlchemy()
 csrf = CSRFProtect()
+mail = Mail()
 
 def create_database():
     db.create_all()
@@ -24,6 +26,16 @@ def create_app():
     app.config['SECRET_KEY'] = '3ac59e5abebccf45a46282ee'
     db.init_app(app)
     csrf.init_app(app)
+
+    app.config['MAIL_SERVER']='smtp.gmail.com'
+    app.config['MAIL_PORT'] = 587
+    app.config['MAIL_USERNAME'] = 'vishnujavvaji19@gmail.com'
+    app.config['MAIL_PASSWORD'] = 'grig irqy fdob maug' #   'oowd hosw eeuv jguy'
+    app.config['MAIL_USE_TLS'] = True
+    app.config['MAIL_USE_SSL'] = False
+    app.config['MAIL_DEFAULT_SENDER'] = 'vishnujavvaji19@gmail.com'
+
+    mail.init_app(app)
     
 
     from .auth import auth_bp

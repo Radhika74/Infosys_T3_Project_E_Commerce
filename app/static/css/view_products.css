@@ -1,0 +1,108 @@
+body{
+    font-family: 'Poppins', sans-serif;
+    color: #262626; /* Dark text */
+    background-color: #F5F5F5;
+    margin-top : 90px;
+    margin-bottom: 90px;
+}
+
+/* hides scrollbar */
+body::-webkit-scrollbar {
+    display: none; 
+}
+.container {
+    width: 98%;
+    max-width: 100%;
+    /* margin-top: 100px; */
+
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(38, 38, 38, 0.15);
+    overflow-x: auto;  /* Enable horizontal scroll for smaller screens */
+}  
+h2 {
+    text-align: center;
+    color: #262626;
+    margin-bottom: 20px;
+}  
+/* Table Styling */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Ensures table fits inside the container */
+}  
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}  
+thead {
+    background: #C4877A;
+    color: rgb(238, 238, 238);
+}  
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+}  
+tbody tr:hover {
+    background-color: #F5F5F5;
+    transition: 0.3s;
+}  
+/* Image Styling */
+.product-img {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}  
+/* Button Styling */
+.btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    text-transform: uppercase;
+    font-weight: bold;
+}  
+.btn-update {
+    background-color: #5C8A8A;
+    color: white;
+}  
+.btn-update:hover {
+    background-color: #497272;
+}  
+.btn-delete {
+    background-color: #C4877A;
+    color: white;
+}  
+.btn-delete:hover {
+    background-color: #a86e62;
+}  
+/* Responsive Design */
+@media screen and (max-width: 100%) {
+    .container {
+        width: 100%;
+        padding: 10px;
+    }
+    th, td {
+        font-size: 12px;
+        padding: 8px;
+    }  
+    .btn {
+        font-size: 12px;
+        padding: 6px 8px;
+    }  
+    .product-img {
+        height: 40px;
+        width: 40px;
+    }
+}  

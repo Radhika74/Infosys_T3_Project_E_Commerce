@@ -6,13 +6,7 @@ body, html {
     background-color: #f9f9f9;
 }
 
-/* Header */
-header {
-    background-color: black;
-    color: white;
-    padding: 15px;
-    text-align: center;
-}
+
 
 .header-container {
     display: flex;
@@ -48,11 +42,7 @@ nav ul li {
     margin-left: 20px;
 }
 
-nav a {
-    color: white;
-    text-decoration: none;
-    font-size: 18px;
-}
+
 
 /* Admin Panel */
 .admin-container {

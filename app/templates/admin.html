@@ -1,64 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Sara Fashion</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <!-- <link rel="stylesheet" href="/app/static/styles.css"> -->
-<body>
-    <header>
-        <div class="header-container">
-            <h2>LOGO</h2>
+{% extends "base.html" %}
 
-            <h2 class="search-container" style="font-style: italic;"> STORE NAME</h2>
-            <!-- <div class="search-container">
-                <input type="text" placeholder="Search">
-                <button class="search-btn">Search</button>
-            </div> -->
-            <nav>
-                <a href="#">HI Admin!!</a>
-            </nav>
-        </div>
-    </header>
-
-    <main class="admin-container">
-        <div class="admin-sidebar">
-            
-
-            <a href="{{ url_for('admin.add_products') }}" style="text-decoration: none;">
-                <button class="admin-btn">Add Products </button>
-            </a>
-
-            <a href="{{ url_for('admin.view_products') }}" style="text-decoration: none;">
-                <button class="admin-btn">View Products</button>
-            </a>
-
-            <button class="admin-btn">Delivery Status</button>
-            <button class="admin-btn">Change Password</button>
-            
+{% block title %} Admin Panel - Fashion Finds {% endblock %}
 
 
-            <!-- <a href="{{ url_for('admin.add_products') }}" class="admin-btn">Add Shop Items</a> -->
+{% block content %}
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<!-- <link rel="stylesheet" href="/app/static/styles.css"> -->
 
-            <!-- <button class="admin-btn" onclick="location.href='{{ url_for('admin.add_products') }}' " type="button">Add Shop Items</button> -->
-            
-        </div>
-
-        <div class="admin-content">
-            <div class="admin-info">
-                <img src="admin-avatar.png" alt="Admin Avatar" class="admin-avatar">
-                <h3>Admin</h3>
-                <p>Email: admin@store.com</p>
-                <p>Phone: +91 **********</p>
+    <div>
+        <main class="admin-container">
+            <div class="admin-sidebar">
+                <div class="admin-info">
+                    <img src="{{ url_for('static', filename='images/male_avatar.png') }}" alt="Admin Avatar" class="admin-avatar">
+                    <h3>Admin</h3>
+                    <p>Email: admin@store.com</p>
+                    <p>Phone: +91 **********</p>
+                </div>
+                <a href="{{ url_for('admin.add_products') }}" style="text-decoration: none;">
+                    <button class="admin-btn">Add Products</button>
+                </a>
+                <a href="{{ url_for('admin.view_products') }}" style="text-decoration: none;">
+                    <button class="admin-btn">View Products</button>
+                </a>
+                <button class="admin-btn">Delivery Status</button>
+                <button class="admin-btn">Change Password</button>
             </div>
-        </div>
-    </main>
 
-    <footer>
-        <p>SARA | © 2023 All rights reserved</p>
-    </footer>
+            <div class="admin-content">
 
+                <h3>Product Section</h3>
+                <div class="products-container">
+                    
+                    {% for item in items%}
+                    <div class="product-card">
+                        <img src="{{ item.product_picture }}" alt="{{ item.product_name }}" style="height: 230px;width: 230px;margin-top: 10px;">
+                        <h4>{{ item.product_name }}</h4>
+                        <p>{{ item.current_price }}</p>
+                    </div>
+                    {% endfor%}
+                    
 
-</body>
-</html>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+{% endblock %}

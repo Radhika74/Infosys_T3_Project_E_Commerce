@@ -41,8 +41,7 @@ def send_email(user,order,token):
     sender_password = 'grig irqy fdob maug'  # Use an app password if using Gmail
     receiver_email =  'rishithabhatt21@gmail.com'               #user.email
     subject='Rate the Product'
-    # body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nTo rate the delivered products click : {rating_url}\n\nBest regards,\nYour Delivery Team\n\n"
-    body = f"Hello Bhattu, \n\nYour order : {"{Amul IceCream Chocolate flavoured family pack}"} with ID : {"{21}"} has been successfully delivered. Thank you for choosing us!\n\nTo rate the delivered products message {"{ 9505358105 }"}\n\nBest regards,\nYour Delivery Team\n\n"
+    body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nTo rate the delivered products click : {rating_url}\n\nBest regards,\nYour Delivery Team\n\n"
     message = MIMEMultipart()
     message["From"] = sender_email
     message["To"] = receiver_email

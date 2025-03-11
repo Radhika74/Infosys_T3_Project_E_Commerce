@@ -36,7 +36,7 @@ def send_email(user,order,token):
     #     print(e)
     #     flash("Mail not sent!!","danger")
 
-    # rating_url = url_for('delivery.product_rating', token=token, _external=True)
+    rating_url = url_for('delivery.product_rating', token=token, _external=True)
     sender_email = 'vishnujavvaji19@gmail.com'
     sender_password = 'grig irqy fdob maug'  # Use an app password if using Gmail
     receiver_email =  'rishithabhatt21@gmail.com'               #user.email

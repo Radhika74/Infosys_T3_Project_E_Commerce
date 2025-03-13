@@ -1,5 +1,5 @@
 from flask import Blueprint,render_template,flash,url_for,redirect,current_app,request
-from .models import Order,DeliveryPerson,User
+from .models import Order,DeliveryPerson,User,Product
 from . import db
 from datetime import datetime
 from flask_mail import Message # type: ignore
@@ -35,11 +35,11 @@ def send_email(user,order,token):
     # except Exception as e:
     #     print(e)
     #     flash("Mail not sent!!","danger")
-
-    rating_url = url_for('delivery.product_rating', token=token, _external=True)
+    
+    rating_url = url_for('delivery.product_rating', token=token, order_id=order.id, _external=True)
     sender_email = 'vishnujavvaji19@gmail.com'
     sender_password = 'grig irqy fdob maug'  # Use an app password if using Gmail
-    receiver_email =  'rishithabhatt21@gmail.com'               #user.email
+    receiver_email =  'vishnujavvaji19@gmail.com'               #user.email
     subject='Rate the Product'
     body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nTo rate the delivered products click : {rating_url}\n\nBest regards,\nYour Delivery Team\n\n"
     message = MIMEMultipart()
@@ -58,16 +58,17 @@ def send_email(user,order,token):
         print(f"An error occurred: {e}")
 
 
-@delivery_bp.route("/product-rating/<token>", methods=["GET", "POST"])
+@delivery_bp.route("/product-rating/<token>/<int:order_id>", methods=["GET", "POST"])
 def product_rating(token):
     # Verify the token
     user = User.verify_reset_token(token, current_app.config['SECRET_KEY'])
-    
+    order = Order.query.filter
     if not user:
         flash("Invalid or expired rating token. Please try again.", "danger")
         return "pleace retry", 404
-    
-    if request.method == "POST":
+    elif request.method == "GET":
+        return redirect(url_for('delivery.product_rating', token=token, order_id=order.id,))   
+    elif request.method == "POST":
 
         return render_template("product_rating.html")
 
@@ -211,6 +212,7 @@ def create_orders():
     # db.session.commit()
 
     customer_name_ = ["raj","ravi","abhi","avinash","bhanu","bhavan","vishnu","vardhan","guptha"]
+    product_id_ = [1,2,3,4,5,6,7,8,9,10]
     product_name_ = ["phone","watch","laptop","shirt","books","bag","phone","book","watch"]
     # delivery_status_ = []
     customer_location_ = ["hyd","delhi","pune","hyd","delhi","delhi","pune","delhi","pune"]
@@ -221,9 +223,11 @@ def create_orders():
         orders = Order()
         orders.customer_name = customer_name_[i]
         orders.product_name = product_name_[i]
+        orders.product_id = product_id_[i%len(product_id_)]
         # orders.delivery_status= delivery_status_[i]
         orders.customer_location = customer_location_[i]
         orders.customer_email = customer_email_[0]
+        orders.customer_address = customer_location_[i]
         # orders.delivery_person_id = delivery_person_id_[i]
 
         db.session.add(orders)

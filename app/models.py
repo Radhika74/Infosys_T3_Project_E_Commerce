@@ -15,7 +15,8 @@ class Product(db.Model):
     rating = db.Column(db.Integer, default = 0)
     category = db.Column(db.String(30))
     sale = db.Column(db.Boolean, default=False)
-    discount = db.Column(db.Integer,nullable=True)
+    discount = db.Column(db.Integer,nullable=True, default = 0)
+    count = db.Column(db.Integer, default = 0)
     quantity_size = db.relationship('ProductSize',backref = 'product',lazy = True)
 
 
@@ -31,6 +32,7 @@ class DeliveryPerson(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, nullable=False)
     customer_name = db.Column(db.String(30), nullable=False)
     product_name = db.Column(db.String(30), nullable=False)
     delivery_status = db.Column(db.String(20), nullable=False, default='In Transit')
@@ -38,6 +40,7 @@ class Order(db.Model):
     order_date = db.Column(db.DateTime(), nullable=True, default=lambda: datetime.now())
     delivery_date = db.Column(db.DateTime(), nullable=True)
     customer_email = db.Column(db.String(50),nullable=False)
+    customer_address = db.Column(db.String(100), nullable=False)
     delivery_person_id = db.Column(db.Integer, db.ForeignKey('delivery_person.id'), nullable=True)
 
 

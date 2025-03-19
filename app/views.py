@@ -33,14 +33,47 @@ def customer_review(product_id):
         if product.rating > 0:
             # This calculates a simple average between the old rating and the new one.
             # Note: For a more accurate average when multiple reviews exist, consider storing a review count.
-            product.rating = (product.rating + rating) / 2.0
+            product.rating = round((product.rating + rating) / 2.0, 1)
         else:
             product.rating = rating
         
         db.session.commit()
-        flash("Thank you for your review!", "success")
+        flash("Customer Review Successful!", "success")
         
         # Redirect to a product detail page or another page as needed
-        return "<h1>Thank you for your review!</h1>"
+        return """
+        <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                    background-color: #f4f4f4;
+                    text-align: center;
+                    padding: 50px;
+                }
+                .message-container {
+                    max-width: 400px;
+                    margin: auto;
+                    background: white;
+                    padding: 20px;
+                    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                    border-radius: 8px;
+                }
+                .success-message {
+                    background-color: #dabdab;
+                    color: white;
+                    padding: 15px;
+                    border-radius: 5px;
+                    font-size: 20px;
+                }
+            </style>
+        </head>
+        <body>
+            <div class='message-container'>
+                <div class='success-message'>Thank you for your review!</div>
+            </div>
+        </body>
+        </html>
+        """
     
     return render_template('customer_review.html', product=product)

@@ -2,35 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/customer_review.css') }}">
   <title>Rate {{ product.product_name }}</title>
-  <style>
-    /* Star rating container */
-    .star-rating {
-      direction: rtl; /* Reverse order for proper hover effects */
-      display: inline-block;
-      font-size: 0;
-    }
-    /* Hide the radio buttons */
-    .star-rating input {
-      display: none;
-    }
-    /* Style the labels as stars */
-    .star-rating label {
-      color: #ccc;
-      font-size: 2rem;
-      padding: 0 .1rem;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-    /* When a radio is checked, or on hover, show the highlighted color */
-    .star-rating input:checked ~ label,
-    .star-rating label:hover,
-    .star-rating label:hover ~ label {
-      color: #f5b301;
-    }
-  </style>
 </head>
 <body>
+  
+  <!-- Product Image -->
+  <img src="{{ url_for('static', filename=product.product_picture[2:]) }}"
+  alt="{{ product.product_name }}" class="product-image">
+
   <h1>Rate {{ product.product_name }}</h1>
   <form method="post" action="{{ url_for('views.customer_review', product_id=product.id) }}">
     <!-- CSRF token -->

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/customer_review.css') }}">
+  <title>Rate {{ product.product_name }}</title>
+</head>
+<body>
+  
+  <!-- Product Image -->
+  <img src="{{ url_for('static', filename=product.product_picture[2:]) }}"
+  alt="{{ product.product_name }}" class="product-image">
+
+  <h1>Rate {{ product.product_name }}</h1>
+  <form method="post" action="{{ url_for('views.customer_review', product_id=product.id, token=token) }}">
+    <!-- CSRF token -->
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    
+    <div class="star-rating">
+      <!-- Stars are ordered from 5 to 1 because of the rtl direction -->
+      <input id="star5" type="radio" name="rating" value="5">
+      <label for="star5" title="5 stars">&#9733;</label>
+
+      <input id="star4" type="radio" name="rating" value="4">
+      <label for="star4" title="4 stars">&#9733;</label>
+
+      <input id="star3" type="radio" name="rating" value="3">
+      <label for="star3" title="3 stars">&#9733;</label>
+
+      <input id="star2" type="radio" name="rating" value="2">
+      <label for="star2" title="2 stars">&#9733;</label>
+
+      <input id="star1" type="radio" name="rating" value="1">
+      <label for="star1" title="1 star">&#9733;</label>
+    </div>
+    <br>
+    <button type="submit">Submit Rating</button>
+  </form>
+
+  <script>
+    // Optional JavaScript: Log the selected rating
+    const stars = document.querySelectorAll('.star-rating input');
+    stars.forEach(star => {
+      star.addEventListener('change', () => {
+        console.log('Rating selected:', star.value);
+      });
+    });
+  </script>
+</body>
+</html>

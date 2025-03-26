@@ -1,6 +1,10 @@
 from flask import Blueprint,render_template,flash,url_for,redirect,current_app,request
 from .models import Order,DeliveryPerson,User,Product
 from . import db
+from flask_mail import Message
+
+delivery_bp = Blueprint('delivery',__name__)
+
 from datetime import datetime
 from flask_mail import Message # type: ignore
 from . import mail
@@ -35,8 +39,13 @@ def send_email(user,order,token):
     # except Exception as e:
     #     print(e)
     #     flash("Mail not sent!!","danger")
+<<<<<<< HEAD
     
     rating_url = url_for('delivery.product_rating', token=token, order_id=order.id, _external=True)
+=======
+
+    rating_url = url_for('views.customer_review',product_id=8, token=token, _external=True)
+>>>>>>> e40ec63538b48be957987f7a5897d0940e2c6dd5
     sender_email = 'vishnujavvaji19@gmail.com'
     sender_password = 'grig irqy fdob maug'  # Use an app password if using Gmail
     receiver_email =  'vishnujavvaji19@gmail.com'               #user.email
@@ -82,7 +91,6 @@ def dashboard(id):
     person = DeliveryPerson.query.get(id)
     available_orders = Order.query.filter_by(customer_location=person.location,delivery_person_id = None).all()
 
-    # assigned_orders = Order.query.filter_by(delivery_person_id=person.id ).all()
 
     delivered_orders = Order.query.filter_by(delivery_status = "Delivered",delivery_person_id = person.id).all()
     assigned_orders = Order.query.filter(Order.delivery_person_id == person.id,Order.delivery_status != "Delivered").all()
@@ -140,8 +148,19 @@ def assign_delivery(order_id,person_id):
         print(f"////////////////////////////////////\n{e}")
         return f"{e}",400
 
+def send_delivery_email(user_email, order_id):
+    """Send an email notification when the order is delivered."""
+    subject = "Your Order Has Been Delivered!"
+    body = f"Hello, \n\nYour order with ID {order_id} has been successfully delivered. Thank you for choosing us!\n\nBest regards,\nYour Delivery Team"
 
+    msg = Message(subject, sender="rthakurinfo4@.com", recipients=[user_email])
+    msg.body = body
 
+    try:
+        mail.send(msg)
+        print(f"Email sent to {user_email} for order {order_id}")
+    except Exception as e:
+        print(f"Error sending email: {e}")
 
 #           \\\\\\\\\\\\\\\\        radhika         //////////////////
 

@@ -40,10 +40,10 @@ def send_email(user,order,token):
     #     print(e)
     #     flash("Mail not sent!!","danger")
 
-    rating_url = url_for('delivery.product_rating', token=token, _external=True)
+    rating_url = url_for('views.customer_review',product_id=8, token=token, _external=True)
     sender_email = 'vishnujavvaji19@gmail.com'
     sender_password = 'grig irqy fdob maug'  # Use an app password if using Gmail
-    receiver_email =  'rishithabhatt21@gmail.com'               #user.email
+    receiver_email =  'vishnujavvaji19@gmail.com'               #user.email
     subject='Rate the Product'
     body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nTo rate the delivered products click : {rating_url}\n\nBest regards,\nYour Delivery Team\n\n"
     message = MIMEMultipart()

@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, redirect,render_template, request, url_for
+from flask import Blueprint, flash, redirect,render_template, request, url_for,send_from_directory
 from .models import Product
 from . import db
 
@@ -13,10 +13,11 @@ def index():
     # return render_template("home.html",items=products)
     return "Views page"
 
-@views_bp.route('/customer_review/<int:product_id>', methods=['GET', 'POST'])
-def customer_review(product_id):
+
+@views_bp.route('/customer_review/<int:product_id>/<token>', methods=['GET', 'POST'])
+def customer_review(product_id,token):
     product = Product.query.get_or_404(product_id)
-    if request.method == 'POST':
+    if request.method == 'POST'and token:
         try:
             # Get the rating from the form submission and convert it to an integer
             rating = int(request.form.get('rating', 0))
@@ -76,4 +77,4 @@ def customer_review(product_id):
         </html>
         """
     
-    return render_template('customer_review.html', product=product)
+    return render_template('customer_review.html', product=product,token=token)

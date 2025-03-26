@@ -12,7 +12,7 @@
   alt="{{ product.product_name }}" class="product-image">
 
   <h1>Rate {{ product.product_name }}</h1>
-  <form method="post" action="{{ url_for('views.customer_review', product_id=product.id) }}">
+  <form method="post" action="{{ url_for('views.customer_review', product_id=product.id, token=token) }}">
     <!-- CSRF token -->
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     

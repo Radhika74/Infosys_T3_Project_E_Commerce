@@ -6,6 +6,7 @@ from itsdangerous import URLSafeTimedSerializer, SignatureExpired, BadSignature
 
 class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
     product_name = db.Column(db.String(100), nullable=False)
     product_picture = db.Column(db.String(1000), nullable=False)
     current_price = db.Column(db.Float, nullable=False)
@@ -17,8 +18,9 @@ class Product(db.Model):
     sale = db.Column(db.Boolean, default=False)
     discount = db.Column(db.Integer,nullable=True, default = 0)
     count = db.Column(db.Integer, default = 0)
-    quantity_size = db.relationship('ProductSize',backref = 'product',lazy = True)
 
+    quantity_size = db.relationship('ProductSize',backref = 'product',lazy = True)
+    orders = db.relationship('Order', backref='product', lazy=True)
 
     def __repr__(self):
         return f" product name : {self.product_name}"
@@ -32,7 +34,9 @@ class DeliveryPerson(db.Model):
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, nullable=False)
+    product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable = False)
+    delivery_person_id = db.Column(db.Integer, db.ForeignKey('delivery_person.id'), nullable=True)
     customer_name = db.Column(db.String(30), nullable=False)
     product_name = db.Column(db.String(30), nullable=False)
     delivery_status = db.Column(db.String(20), nullable=False, default='In Transit')
@@ -41,7 +45,7 @@ class Order(db.Model):
     delivery_date = db.Column(db.DateTime(), nullable=True)
     customer_email = db.Column(db.String(50),nullable=False)
     customer_address = db.Column(db.String(100), nullable=False)
-    delivery_person_id = db.Column(db.Integer, db.ForeignKey('delivery_person.id'), nullable=True)
+    has_rated = db.Column(db.Boolean, default=False)
 
 
 class ProductSize(db.Model):
@@ -49,9 +53,6 @@ class ProductSize(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
     size = db.Column(db.String(50), nullable=False, default="No size")
     quantity = db.Column(db.Integer, nullable=False, default = 0)
-    
-
-
 
 
 class User(db.Model):
@@ -66,6 +67,10 @@ class User(db.Model):
     pincode = db.Column(db.String(10), nullable=False)
     reset_token = db.Column(db.String(255), nullable=True)
     reset_token_expiry = db.Column(db.DateTime, nullable=True)
+    approved = db.Column(db.Boolean, default=False)    
+    role = db.Column(db.String(10), nullable=False, default = "User")
+
+    orders = db.relationship('Order', backref='user', lazy=True)
     
     def generate_reset_token(self, secret_key):
         """Generate a unique reset token for password reset"""

@@ -10,46 +10,30 @@ from flask_mail import Message # type: ignore
 from . import mail
 
 
-delivery_bp = Blueprint('delivery',__name__)
-
-
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
 
-def send_email(user,order,token):
-    """Send a Product rating email to the user"""
 
+
+def send_email(user, order, token):
+    """Send a Product rating email to the user"""
     print("send_email function called")
 
-    # rating_url = url_for('delivery.product_rating', token=token, _external=True)
-    # subject='Rate the Product'
-    # msg = Message(subject,sender = "vishnujavvaji19@gmail.com",recipients=["vishnujavvaji19@gmail.com"])
-    # msg.body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nBest regards,\nYour Delivery Team\n\nTo rate the delivered products click : {rating_url}"
-    # try:
-    #     mail.send(msg)
-    #     print(rating_url)
-    #     print(user.email)
-        
-    #     print("Email sent")
-    # except smtplib.SMTPException as e:
-    #     print(f"except smtplib.SMTPException as e: {e}")
-    # except Exception as e:
-    #     print(e)
-    #     flash("Mail not sent!!","danger")
-<<<<<<< HEAD
-    
-    rating_url = url_for('delivery.product_rating', token=token, order_id=order.id, _external=True)
-=======
+    rating_url = url_for(
+        "views.customer_review",
+        user_id=user.id,
+        order_id=order.id,
+        token=token,
+        _external=True,
+    )
 
-    rating_url = url_for('views.customer_review',product_id=8, token=token, _external=True)
->>>>>>> e40ec63538b48be957987f7a5897d0940e2c6dd5
     sender_email = 'vishnujavvaji19@gmail.com'
-    sender_password = 'grig irqy fdob maug'  # Use an app password if using Gmail
-    receiver_email =  'vishnujavvaji19@gmail.com'               #user.email
-    subject='Rate the Product'
+    sender_password = 'grig irqy fdob maug'
+    receiver_email = 'vishnujavvaji19@gmail.com'
+    subject = 'Rate the Product'
     body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nTo rate the delivered products click : {rating_url}\n\nBest regards,\nYour Delivery Team\n\n"
     message = MIMEMultipart()
     message["From"] = sender_email
@@ -67,22 +51,78 @@ def send_email(user,order,token):
         print(f"An error occurred: {e}")
 
 
-@delivery_bp.route("/product-rating/<token>/<int:order_id>", methods=["GET", "POST"])
-def product_rating(token):
-    # Verify the token
-    user = User.verify_reset_token(token, current_app.config['SECRET_KEY'])
-    order = Order.query.filter
-    if not user:
-        flash("Invalid or expired rating token. Please try again.", "danger")
-        return "pleace retry", 404
-    elif request.method == "GET":
-        return redirect(url_for('delivery.product_rating', token=token, order_id=order.id,))   
-    elif request.method == "POST":
 
-        return render_template("product_rating.html")
+
+
+
+
+
+
+# def send_email(user,order,token):
+#     """Send a Product rating email to the user"""
+
+#     print("send_email function called")
+
+#     # rating_url = url_for('delivery.product_rating', token=token, _external=True)
+#     # subject='Rate the Product'
+#     # msg = Message(subject,sender = "vishnujavvaji19@gmail.com",recipients=["vishnujavvaji19@gmail.com"])
+#     # msg.body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nBest regards,\nYour Delivery Team\n\nTo rate the delivered products click : {rating_url}"
+#     # try:
+#     #     mail.send(msg)
+#     #     print(rating_url)
+#     #     print(user.email)
+        
+#     #     print("Email sent")
+#     # except smtplib.SMTPException as e:
+#     #     print(f"except smtplib.SMTPException as e: {e}")
+#     # except Exception as e:
+#     #     print(e)
+#     #     flash("Mail not sent!!","danger")
+
+
+#     # rating_url = url_for('views.customer_review',user_id = user.id, product_id = order.product_id, token=token, _external=True)
+#     rating_url = url_for("views.customer_review",user_id=user.id,product_id=order.product_id,order_id=order.id,token=token,_external=True)
+
+#     sender_email = 'vishnujavvaji19@gmail.com'
+#     sender_password = 'grig irqy fdob maug'  # Use an app password if using Gmail
+#     receiver_email =  'vishnujavvaji19@gmail.com'               #user.email
+#     subject='Rate the Product'
+#     body = f"Hello {user.name}, \n\nYour order : {order.product_name} with ID {order.id} has been successfully delivered. Thank you for choosing us!\n\nTo rate the delivered products click : {rating_url}\n\nBest regards,\nYour Delivery Team\n\n"
+#     message = MIMEMultipart()
+#     message["From"] = sender_email
+#     message["To"] = receiver_email
+#     message["Subject"] = subject
+#     message.attach(MIMEText(body, "plain"))
+#     try:
+#         with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
+#             server.login(sender_email, sender_password)
+#             server.send_message(message)
+#         print("Email sent successfully!")
+#     except smtplib.SMTPAuthenticationError:
+#         print("Authentication error. Please check your email and password.")
+#     except Exception as e:
+#         print(f"An error occurred: {e}")
+
+
+
+
+
+# @delivery_bp.route("/product-rating/<token>/<int:order_id>", methods=["GET", "POST"])
+# def product_rating(token):
+#     # Verify the token
+#     user = User.verify_reset_token(token, current_app.config['SECRET_KEY'])
+#     order = Order.query.filter
+#     if not user:
+#         flash("Invalid or expired rating token. Please try again.", "danger")
+#         return "pleace retry", 404
+#     elif request.method == "GET":
+#         return redirect(url_for('delivery.product_rating', token=token, order_id=order.id,))   
+#     elif request.method == "POST":
+
+#         return render_template("product_rating.html")
 
     
-    return render_template("product_rating.html",user_token=token)
+#     return render_template("product_rating.html",user_token=token)
 
 
 @delivery_bp.route('/dashboard/<int:id>')
@@ -100,33 +140,56 @@ def dashboard(id):
 
 
 
-@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['GET','POST'])
-def update_status(order_id,status):
-
+@delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['GET', 'POST'])
+def update_status(order_id, status):
     order = Order.query.get(order_id)
-    if order :
+    if order:
         try:
             order.delivery_status = status
             if status == "Delivered":
                 order.delivery_date = datetime.now()
-
                 user = User.query.filter_by(email=order.customer_email).first()
-
-                # user = User.query.first()
-                print(user)
-                # user = User(name = order.customer_name,phone = 9505358105, email = order.customer_email,password="Vishnu@19",address="hyd",state="Telangana",city="hyd",pincode=500014)
-                # db.session.add(user)
-                # db.session.commit()
                 token = user.generate_reset_token(current_app.config['SECRET_KEY'])
-                send_email(user,order,token)
+                send_email(user, order, token)
             db.session.commit()
             return redirect(f'/delivery/dashboard/{order.delivery_person_id}')
         except Exception as e:
             print(e)
-            flash("Something went wrong!!!, please try again!!","danger")
+            flash("Something went wrong!!!, please try again!!", "danger")
             return redirect(f'/delivery/dashboard/{order.delivery_person_id}')
     else:
         return "no order exist", 400
+
+
+
+# @delivery_bp.route("/update_status/<int:order_id>/<status>", methods=['GET','POST'])
+# def update_status(order_id,status):
+
+#     order = Order.query.get(order_id)
+#     if order :
+#         try:
+#             order.delivery_status = status
+#             if status == "Delivered":
+#                 order.delivery_date = datetime.now()
+
+#                 user = User.query.filter_by(email=order.customer_email).first()
+
+#                 # user = User.query.first()
+                
+#                 # user = User(name = "Vishnu", phone = 9505358105, email = "vishnujavvaji19@gmail.com", password="Vishnu@19", address="1-1/1", state="Telangana", city="hyd", pincode=500014 )
+#                 # db.session.add(user)
+#                 # db.session.commit()
+#                 print(user)
+#                 token = user.generate_reset_token(current_app.config['SECRET_KEY'])
+#                 send_email(user,order,token)
+#             db.session.commit()
+#             return redirect(f'/delivery/dashboard/{order.delivery_person_id}')
+#         except Exception as e:
+#             print(e)
+#             flash("Something went wrong!!!, please try again!!","danger")
+#             return redirect(f'/delivery/dashboard/{order.delivery_person_id}')
+#     else:
+#         return "no order exist", 400
 
 
 @delivery_bp.route('/assign_delivery/<int:order_id>/<int:person_id>', methods=['GET','POST'])

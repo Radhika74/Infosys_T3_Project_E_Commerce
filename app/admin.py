@@ -107,7 +107,7 @@ def add_products():
 
             db.session.commit()
             print(f"inside try block ProductSize commit")  # Debugging
-            flash(f"{new_product.product_name} added successfully", "success")
+            flash(f"'{new_product.product_name}' added successfully", "success")
             return redirect("/admin/add-product")
         except Exception as e:
             flash("Product Not Added!! There might be some issue!!", "danger")

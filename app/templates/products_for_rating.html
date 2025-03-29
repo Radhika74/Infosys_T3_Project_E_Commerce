@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %} products_for_rating {% endblock %}
+
+
+{% block content %}
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+<!-- <link rel="stylesheet" href="/app/static/styles.css"> -->
+
+    <div>
+        <main class="admin-container">
+            
+            <div class="admin-content">
+
+                <h3>Product Section</h3>
+                <div class="products-container">
+                    
+                    {% for item in user.orders%}
+                    <div class="product-card">
+                        <a href="{{ url_for('views.customer_review',user_id = user.id,product_id=product.id, token=token) }}">
+                            <img src="{{ item.product_picture }}" alt="{{ item.product_name }}" style="height: 230px;width: 230px;margin-top: 10px;">
+                            <h4>{{ item.product_name }}</h4>
+                            <p>{{ item.current_price }}</p>
+                        </a>
+                    </div>
+                    {% endfor%}
+                    
+
+                </div>
+            </div>
+        </main>
+    </div>
+    
+{% endblock %}

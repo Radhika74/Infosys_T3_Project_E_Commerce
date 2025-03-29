@@ -70,3 +70,25 @@ body {
     margin: 10px 0;
   }
   
+  .product-rating-container {
+    /* display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; Allow wrapping on smaller screens 
+    */
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content:center;
+    margin-top: 20px;
+}
+  .card{
+    background: white;
+    /* padding: 15px; */
+    border-radius: 10px;
+    width: 250px;
+    height: 350px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+  }
